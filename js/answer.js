@@ -50,20 +50,22 @@ class Answer {
       this.pos.x + this.w + this.h / 2,
       this.pos.y
     );
+    let l =
+      this.letter == "B" || this.letter == "D" ? this.h * 3 : this.h * 0.8;
     line(
       this.pos.x + this.w + this.h / 2,
       this.pos.y,
-      this.pos.x + this.w + this.h,
+      this.pos.x + this.w + l,
       this.pos.y
     );
 
     let wordsCount = this.txt.split(" ").length;
     let yOffset = 0;
     if (wordsCount <= 10) {
-      textSize(FONT_SIZE1);
+      textSize(FONT_SIZE[0]);
       yOffset = 5;
     } else {
-      textSize(FONT_SIZE1);
+      textSize(FONT_SIZE[0]);
       yOffset = -5;
     }
 
@@ -73,7 +75,7 @@ class Answer {
     textStyle(NORMAL);
 
     fill(DARKYELLOW);
-    text(this.letter, this.pos.x + this.h / 2, this.pos.y + yOffset);
+    text(this.letter + ": ", this.pos.x + this.h / 2, this.pos.y + yOffset);
 
     fill(WHITE);
 

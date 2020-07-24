@@ -52,7 +52,7 @@ class Question {
     line(
       this.pos.x + this.w + this.h / 2,
       this.pos.y,
-      this.pos.x + this.w + this.h,
+      this.xOffset + this.w + 2 * this.h + this.xOffset,
       this.pos.y
     );
 
@@ -61,10 +61,10 @@ class Question {
     let wordsCount = this.txt.split(" ").length;
     let yOffset = 0;
     if (wordsCount <= 10) {
-      textSize(FONT_SIZE4);
+      textSize(FONT_SIZE[3]);
       yOffset = 5;
     } else {
-      textSize(FONT_SIZE2);
+      textSize(FONT_SIZE[1]);
       yOffset = -5;
     }
 

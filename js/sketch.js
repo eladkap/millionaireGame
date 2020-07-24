@@ -2,6 +2,7 @@
 var game;
 var question;
 var answers;
+var timer;
 
 function SetGame() {
   game = new Game();
@@ -26,7 +27,7 @@ function SetAnswers() {
     ANSWER_WIDTH,
     ANSWER_HEIGHT,
     ANSWER_A_XOFFSET,
-    "A:",
+    "A",
     "Los Angeles",
     2
   );
@@ -36,7 +37,7 @@ function SetAnswers() {
     ANSWER_WIDTH,
     ANSWER_HEIGHT,
     ANSWER_B_XOFFSET,
-    "B:",
+    "B",
     "New York City",
     2
   );
@@ -46,7 +47,7 @@ function SetAnswers() {
     ANSWER_WIDTH,
     ANSWER_HEIGHT,
     ANSWER_C_XOFFSET,
-    "C:",
+    "C",
     "Houston",
     2
   );
@@ -56,7 +57,7 @@ function SetAnswers() {
     ANSWER_WIDTH,
     ANSWER_HEIGHT,
     ANSWER_D_XOFFSET,
-    "D:",
+    "D",
     "Miami",
     2
   );
@@ -65,6 +66,10 @@ function SetAnswers() {
   answers.push(answer2);
   answers.push(answer3);
   answers.push(answer4);
+}
+
+function SetTimer() {
+  timer = new Timer(TIMER_POS_X, TIMER_POS_Y, TIMER_RADIUS, TIMER_VALUE);
 }
 
 function DrawAnswers() {
@@ -77,9 +82,11 @@ function DrawAnswers() {
 function setup() {
   // createCanvas(windowWidth, windowHeight);
   createCanvas(SCREEN_WIDTH, SCREEN_HEIGHT);
+  frameRate(FPS);
   SetGame();
   SetQuestion();
   SetAnswers();
+  SetTimer();
 }
 
 function draw() {
@@ -87,4 +94,6 @@ function draw() {
   game.Draw();
   question.Draw();
   DrawAnswers();
+  timer.Draw();
+  timer.Update();
 }
