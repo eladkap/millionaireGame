@@ -59,12 +59,36 @@ const ANSWER_D_POS_Y = SCREEN_HEIGHT * 0.96;
 const ANSWER_D_XOFFSET = SCREEN_WIDTH * 0.5;
 
 /* Timer */
-const TIMER_POS_X = SCREEN_WIDTH * 0.4;
-const TIMER_POS_Y = SCREEN_HEIGHT * 0.4;
-const TIMER_RADIUS = 200;
+const TIMER_POS_X = SCREEN_WIDTH * 0.1;
+const TIMER_POS_Y = SCREEN_HEIGHT * 0.15;
+const TIMER_RADIUS = 150;
 const TIMER_VALUE = 30;
+
+/* Money Table */
+const MONEY_TABLE_POS_X = SCREEN_WIDTH * 0.8;
+const MONEY_TABLE_POS_Y = SCREEN_WIDTH * 0.15;
+const MONEY_TABLE_WIDTH = SCREEN_WIDTH * 0.3;
+const MONEY_TABLE_ROW_HEIGHT = SCREEN_HEIGHT * 0.03;
+const MONEY_VALUES = [
+  "100",
+  "200",
+  "300",
+  "500",
+  "1,000",
+  "2,000",
+  "4,000",
+  "8,000",
+  "16,000",
+  "32,000",
+  "64,000",
+  "125,000",
+  "250,000",
+  "500,000",
+  "1,000,000",
+];
+const CURRENCY = "$";
 
 /* Font */
 const FONT_FAMILY = "Arial";
 const FONT_SIZE = [16, 20, 24, 28, 32, 36, 40];
-const FONT_SIZE_BIG = 80;
+const FONT_SIZE_BIG = 60;

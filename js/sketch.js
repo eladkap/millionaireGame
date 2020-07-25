@@ -3,10 +3,7 @@ var game;
 var question;
 var answers;
 var timer;
-
-function SetGame() {
-  game = new Game();
-}
+var moneyTable;
 
 function SetQuestion() {
   question = new Question(
@@ -72,9 +69,35 @@ function SetTimer() {
   timer = new Timer(TIMER_POS_X, TIMER_POS_Y, TIMER_RADIUS, TIMER_VALUE);
 }
 
+function SetMoneyTable() {
+  moneyTable = new MoneyTable(
+    MONEY_TABLE_POS_X,
+    MONEY_TABLE_POS_Y,
+    MONEY_TABLE_WIDTH,
+    MONEY_TABLE_ROW_HEIGHT
+  );
+}
+
 function DrawAnswers() {
   for (let answer of answers) {
     answer.Draw();
+  }
+}
+
+/* Game Functions */
+function SetGame() {
+  SetQuestion();
+  SetAnswers();
+  SetTimer();
+  SetMoneyTable();
+}
+
+async function ShowQuestionAndAnswers() {
+  question.SetVisible(true);
+  await Sleep(1000);
+  for (let answer of answers) {
+    answer.SetVisible(true);
+    await Sleep(1000);
   }
 }
 
@@ -84,16 +107,19 @@ function setup() {
   createCanvas(SCREEN_WIDTH, SCREEN_HEIGHT);
   frameRate(FPS);
   SetGame();
-  SetQuestion();
-  SetAnswers();
-  SetTimer();
 }
 
 function draw() {
   background(BLACK);
-  game.Draw();
   question.Draw();
   DrawAnswers();
   timer.Draw();
   timer.Update();
+  moneyTable.Draw();
+}
+
+function keyPressed() {
+  if (keyCode === ENTER) {
+    ShowQuestionAndAnswers();
+  }
 }

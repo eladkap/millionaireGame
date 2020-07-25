@@ -6,6 +6,7 @@ class Question {
     this.xOffset = xOffset;
     this.txt = txt;
     this.borderSize = borderSize;
+    this.visible = false;
   }
 
   Draw() {
@@ -56,21 +57,31 @@ class Question {
       this.pos.y
     );
 
-    fill(WHITE);
-    noStroke();
-    let wordsCount = this.txt.split(" ").length;
-    let yOffset = 0;
-    if (wordsCount <= 10) {
-      textSize(FONT_SIZE[3]);
-      yOffset = 5;
-    } else {
-      textSize(FONT_SIZE[1]);
-      yOffset = -5;
-    }
+    if (this.visible) {
+      fill(WHITE);
+      noStroke();
+      let wordsCount = this.txt.split(" ").length;
+      let yOffset = 0;
+      if (wordsCount <= 10) {
+        textSize(FONT_SIZE[3]);
+        yOffset = 5;
+      } else {
+        textSize(FONT_SIZE[1]);
+        yOffset = -5;
+      }
 
-    textFont(FONT_FAMILY);
-    textAlign(CENTER);
-    textStyle(NORMAL);
-    text(this.txt, this.pos.x + SCREEN_WIDTH / 2.5, this.pos.y + yOffset);
+      textFont(FONT_FAMILY);
+      textAlign(CENTER);
+      textStyle(NORMAL);
+      text(this.txt, this.pos.x + SCREEN_WIDTH / 2.5, this.pos.y + yOffset);
+    }
+  }
+
+  SetVisible(value) {
+    this.visible = value;
+  }
+
+  IsVisible() {
+    return this.visible;
   }
 }

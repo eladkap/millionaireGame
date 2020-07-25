@@ -7,6 +7,8 @@ class Answer {
     this.letter = letter;
     this.txt = txt;
     this.borderSize = borderSize;
+    this.chosen = false;
+    this.visible = false;
   }
 
   Draw() {
@@ -69,17 +71,35 @@ class Answer {
       yOffset = -5;
     }
 
-    noStroke();
-    textFont(FONT_FAMILY);
-    textAlign(LEFT);
-    textStyle(NORMAL);
+    if (this.visible) {
+      noStroke();
+      textFont(FONT_FAMILY);
+      textAlign(LEFT);
+      textStyle(NORMAL);
 
-    fill(DARKYELLOW);
-    text(this.letter + ": ", this.pos.x + this.h / 2, this.pos.y + yOffset);
+      fill(DARKYELLOW);
+      text(this.letter + ": ", this.pos.x + this.h / 2, this.pos.y + yOffset);
 
-    fill(WHITE);
+      fill(WHITE);
 
-    text(this.txt, this.pos.x + this.h, this.pos.y + yOffset);
+      text(this.txt, this.pos.x + this.h, this.pos.y + yOffset);
+    }
+  }
+
+  SetChosen(value) {
+    this.chosen = value;
+  }
+
+  IsChosen() {
+    return this.chosen;
+  }
+
+  SetVisible(value) {
+    this.visible = value;
+  }
+
+  IsVisible() {
+    return this.visible;
   }
 
   IsClicked(mouseX, mouseY) {
