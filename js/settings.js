@@ -20,8 +20,7 @@ const ORANGE = [255, 150, 50];
 const PINK = [250, 0, 150];
 const YELLOW = [255, 255, 0];
 const DARKYELLOW = [200, 200, 0];
-const GREEN = [0, 250, 0];
-const GREEN_BG = [0, 70, 0];
+const GREEN = [0, 200, 0];
 const AQUA = [100, 255, 255];
 const BLUE = [0, 0, 250];
 const LIGHTBLUE = [100, 149, 237];
@@ -65,10 +64,10 @@ const TIMER_RADIUS = 150;
 const TIMER_VALUE = 30;
 
 /* Money Table */
-const MONEY_TABLE_POS_X = SCREEN_WIDTH * 0.8;
+const MONEY_TABLE_POS_X = SCREEN_WIDTH * 0.65;
 const MONEY_TABLE_POS_Y = SCREEN_WIDTH * 0.15;
-const MONEY_TABLE_WIDTH = SCREEN_WIDTH * 0.3;
-const MONEY_TABLE_ROW_HEIGHT = SCREEN_HEIGHT * 0.03;
+const MONEY_TABLE_WIDTH = SCREEN_WIDTH * 0.4;
+const MONEY_TABLE_ROW_HEIGHT = SCREEN_HEIGHT * 0.035;
 const MONEY_VALUES = [
   "100",
   "200",
@@ -92,3 +91,22 @@ const CURRENCY = "$";
 const FONT_FAMILY = "Arial";
 const FONT_SIZE = [16, 20, 24, 28, 32, 36, 40];
 const FONT_SIZE_BIG = 60;
+
+/* Lifeline */
+const LIFELINE_WIDTH = SCREEN_WIDTH * 0.05;
+const LIFELINE_HEIGHT = SCREEN_WIDTH * 0.025;
+const LIFELINE_BORDER = 5;
+const LIFELINE_POS_Y = SCREEN_WIDTH * 0.07;
+const LIFELINE1_POS_X = SCREEN_WIDTH * 0.7;
+const LIFELINE2_POS_X = SCREEN_WIDTH * 0.82;
+const LIFELINE3_POS_X = SCREEN_WIDTH * 0.94;
+
+/* DELAY */
+const DELAY = 1000;
+const DELAY_QUESTION = 2000;
+const DELAY_ANSWER = 1000;
+
+/* Sound */
+const RULES_SONG = "sound/Millionaire - Explain the Rules.mp3";
+const EASY_QUESTIONS_SONG = "sound/easy_questions.mp3";
+const LETS_PLAY_SONG = "sound/Lets Play.mp3";

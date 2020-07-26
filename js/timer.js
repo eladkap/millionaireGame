@@ -11,8 +11,12 @@ class Timer {
     return this.running;
   }
 
-  SetRunning(value) {
-    this.running = value;
+  Run() {
+    this.running = true;
+  }
+
+  Stop() {
+    this.running = false;
   }
 
   IsVisible() {

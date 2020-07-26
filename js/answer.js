@@ -9,6 +9,7 @@ class Answer {
     this.borderSize = borderSize;
     this.chosen = false;
     this.visible = false;
+    this.backcolor = BLACK;
   }
 
   Draw() {
@@ -71,6 +72,33 @@ class Answer {
       yOffset = -5;
     }
 
+    // backcolor
+    fill(this.backcolor);
+    noStroke();
+    rect(
+      this.pos.x + this.h / 2,
+      this.pos.y - this.h / 2,
+      this.w - this.h / 2,
+      this.h
+    );
+    triangle(
+      this.pos.x + this.h / 2,
+      this.pos.y - this.h / 2,
+      this.pos.x + this.h / 2,
+      this.pos.y + this.h / 2,
+      this.pos.x,
+      this.pos.y
+    );
+
+    triangle(
+      this.pos.x + this.h / 2 + this.w,
+      this.pos.y,
+      this.pos.x + this.w,
+      this.pos.y - this.h / 2,
+      this.pos.x + this.w,
+      this.pos.y + this.h / 2
+    );
+
     if (this.visible) {
       noStroke();
       textFont(FONT_FAMILY);
@@ -90,6 +118,10 @@ class Answer {
     this.chosen = value;
   }
 
+  ChooseUnchoose() {
+    this.chosen = !this.chosen;
+  }
+
   IsChosen() {
     return this.chosen;
   }
@@ -100,6 +132,10 @@ class Answer {
 
   IsVisible() {
     return this.visible;
+  }
+
+  SetBackcolor(backcolor) {
+    this.backcolor = backcolor;
   }
 
   IsClicked(mouseX, mouseY) {

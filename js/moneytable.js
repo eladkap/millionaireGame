@@ -25,24 +25,24 @@ class MoneyTable {
     textAlign(LEFT);
     textStyle(NORMAL);
     textFont("Copperplate Gothic");
-    textSize(FONT_SIZE[1]);
+    textSize(FONT_SIZE[2]);
 
     let x = this.pos.x;
     let y = this.pos.y;
     let n = MONEY_VALUES.length;
     for (let i = 0; i < n; i++) {
       let j = n - i - 1;
-      if ((i + 1) % 5 == 0 || i == 0) {
+      if (i % 5 == 0 || j == 0) {
         fill(WHITE);
       } else {
         fill(ORANGE);
       }
-      let d = " ";
+      let d = j >= 9 ? "\t" : "\t\t";
       if (j <= this.current) {
         d = "♦";
       }
       if (this.visible) {
-        text(j + 1 + "\t\t" + d + "\t\t" + CURRENCY + MONEY_VALUES[j], x, y);
+        text(d + (j + 1) + "\t\t\t\t" + CURRENCY + MONEY_VALUES[j], x, y);
       }
 
       y += this.rowHeight;

@@ -7,6 +7,7 @@ class Question {
     this.txt = txt;
     this.borderSize = borderSize;
     this.visible = false;
+    this.backcolor = BLACK;
   }
 
   Draw() {
@@ -83,5 +84,9 @@ class Question {
 
   IsVisible() {
     return this.visible;
+  }
+
+  SetBackcolor(backcolor) {
+    this.backcolor = backcolor;
   }
 }

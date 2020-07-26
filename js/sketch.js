@@ -4,6 +4,12 @@ var question;
 var answers;
 var timer;
 var moneyTable;
+var lifelines;
+
+/* Sound */
+var rulesSong;
+var letsPlaySong;
+var easyQuestionsSong;
 
 function SetQuestion() {
   question = new Question(
@@ -78,9 +84,46 @@ function SetMoneyTable() {
   );
 }
 
+function SetLifelines() {
+  lifelines = [];
+  let lifeline5050 = new LifeLine(
+    LIFELINE1_POS_X,
+    LIFELINE_POS_Y,
+    LIFELINE_WIDTH,
+    LIFELINE_HEIGHT,
+    "50:50",
+    LIFELINE_BORDER
+  );
+  let lifelinePhone = new LifeLine(
+    LIFELINE2_POS_X,
+    LIFELINE_POS_Y,
+    LIFELINE_WIDTH,
+    LIFELINE_HEIGHT,
+    "phone",
+    LIFELINE_BORDER
+  );
+  let lifelineAudience = new LifeLine(
+    LIFELINE3_POS_X,
+    LIFELINE_POS_Y,
+    LIFELINE_WIDTH,
+    LIFELINE_HEIGHT,
+    "audience",
+    LIFELINE_BORDER
+  );
+  lifelines.push(lifeline5050);
+  lifelines.push(lifelinePhone);
+  lifelines.push(lifelineAudience);
+}
+
 function DrawAnswers() {
   for (let answer of answers) {
     answer.Draw();
+  }
+}
+
+function DrawLifelines() {
+  for (let lifeline of lifelines) {
+    lifeline.Draw();
   }
 }
 
@@ -90,15 +133,29 @@ function SetGame() {
   SetAnswers();
   SetTimer();
   SetMoneyTable();
+  SetLifelines();
 }
 
 async function ShowQuestionAndAnswers() {
+  letsPlaySong.play();
+  await Sleep(5000);
+  letsPlaySong.stop();
+  await Sleep(DELAY);
   question.SetVisible(true);
-  await Sleep(1000);
+  easyQuestionsSong.play();
+  await Sleep(DELAY_QUESTION);
   for (let answer of answers) {
     answer.SetVisible(true);
-    await Sleep(1000);
+    await Sleep(DELAY_ANSWER);
   }
+  timer.Run();
+}
+
+/* SOUND */
+function LoadSoundFiles() {
+  rulesSong = loadSound(RULES_SONG);
+  letsPlaySong = loadSound(LETS_PLAY_SONG);
+  easyQuestionsSong = loadSound(EASY_QUESTIONS_SONG);
 }
 
 /* MAIN */
@@ -106,6 +163,7 @@ function setup() {
   // createCanvas(windowWidth, windowHeight);
   createCanvas(SCREEN_WIDTH, SCREEN_HEIGHT);
   frameRate(FPS);
+  LoadSoundFiles();
   SetGame();
 }
 
@@ -115,11 +173,38 @@ function draw() {
   DrawAnswers();
   timer.Draw();
   timer.Update();
+  if (timer.value == 0) {
+    console.log("Time's up!!!");
+    easyQuestionsSong.stop();
+  }
   moneyTable.Draw();
+  DrawLifelines();
 }
 
+/* Keyboard Events */
 function keyPressed() {
   if (keyCode === ENTER) {
     ShowQuestionAndAnswers();
+  }
+}
+
+/* Mouse Events */
+function mousePressed() {
+  // Check lifelines
+  for (let lifeline of lifelines) {
+    if (lifeline.IsClicked(mouseX, mouseY)) {
+      // lifeline.SetChosen(true);
+      lifeline.ChooseUnchoose();
+      console.log(lifeline.type + " was chosen");
+    }
+  }
+
+  // Check answers
+  for (let answer of answers) {
+    if (answer.IsClicked(mouseX, mouseY)) {
+      // answer.SetChosen(true);
+      answer.ChooseUnchoose();
+      console.log(answer.txt + " was chosen");
+    }
   }
 }
