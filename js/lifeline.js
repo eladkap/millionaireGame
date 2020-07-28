@@ -59,8 +59,8 @@ class LifeLine {
       beginShape();
       vertex(this.pos.x - a, this.pos.y - b);
       vertex(this.pos.x - 20 - a, this.pos.y + 10 - b);
-      vertex(this.pos.x - 30 - a, this.pos.y + 25 - b);
-      vertex(this.pos.x + 30 - a, this.pos.y + 25 - b);
+      vertex(this.pos.x - 25 - a, this.pos.y + 25 - b);
+      vertex(this.pos.x + 25 - a, this.pos.y + 25 - b);
       vertex(this.pos.x + 20 - a, this.pos.y + 10 - b);
       vertex(this.pos.x - a, this.pos.y - b);
       endShape();
@@ -68,8 +68,8 @@ class LifeLine {
       beginShape();
       vertex(this.pos.x + a, this.pos.y - b);
       vertex(this.pos.x - 20 + a, this.pos.y + 10 - b);
-      vertex(this.pos.x - 30 + a, this.pos.y + 25 - b);
-      vertex(this.pos.x + 30 + a, this.pos.y + 25 - b);
+      vertex(this.pos.x - 25 + a, this.pos.y + 25 - b);
+      vertex(this.pos.x + 25 + a, this.pos.y + 25 - b);
       vertex(this.pos.x + 20 + a, this.pos.y + 10 - b);
       vertex(this.pos.x + a, this.pos.y - b);
       endShape();
@@ -77,8 +77,8 @@ class LifeLine {
       beginShape();
       vertex(this.pos.x, this.pos.y);
       vertex(this.pos.x - 20, this.pos.y + 10);
-      vertex(this.pos.x - 30, this.pos.y + 25);
-      vertex(this.pos.x + 30, this.pos.y + 25);
+      vertex(this.pos.x - 25, this.pos.y + 25);
+      vertex(this.pos.x + 25, this.pos.y + 25);
       vertex(this.pos.x + 20, this.pos.y + 10);
       vertex(this.pos.x, this.pos.y);
       endShape();

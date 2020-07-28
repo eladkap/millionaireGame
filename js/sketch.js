@@ -11,6 +11,15 @@ var rulesSong;
 var letsPlaySong;
 var easyQuestionsSong;
 
+/* Questions DB */
+var qdb;
+var questionsPool;
+var currQuestion;
+var currIndex = 0;
+
+/* Flag indicates the user to choose an action */
+var chooseState = false;
+
 function SetQuestion() {
   question = new Question(
     QUESTION_POS_X,
@@ -18,7 +27,7 @@ function SetQuestion() {
     QUESTION_WIDTH,
     QUESTION_HEIGHT,
     QUESTION_XOFFSET,
-    "If you were in the east coast of the United States, which city you may travel to \nand in which you could make a swim in the ocean?",
+    currQuestion.question,
     3
   );
 }
@@ -31,7 +40,7 @@ function SetAnswers() {
     ANSWER_HEIGHT,
     ANSWER_A_XOFFSET,
     "A",
-    "Los Angeles",
+    currQuestion.A,
     2
   );
   let answer2 = new Answer(
@@ -41,7 +50,7 @@ function SetAnswers() {
     ANSWER_HEIGHT,
     ANSWER_B_XOFFSET,
     "B",
-    "New York City",
+    currQuestion.B,
     2
   );
   let answer3 = new Answer(
@@ -51,7 +60,7 @@ function SetAnswers() {
     ANSWER_HEIGHT,
     ANSWER_C_XOFFSET,
     "C",
-    "Houston",
+    currQuestion.C,
     2
   );
   let answer4 = new Answer(
@@ -61,7 +70,7 @@ function SetAnswers() {
     ANSWER_HEIGHT,
     ANSWER_D_XOFFSET,
     "D",
-    "Miami",
+    currQuestion.D,
     2
   );
   answers = [];
@@ -149,13 +158,24 @@ async function ShowQuestionAndAnswers() {
     await Sleep(DELAY_ANSWER);
   }
   timer.Run();
+  chooseState = true;
 }
 
-/* SOUND */
+/* Load Sound */
 function LoadSoundFiles() {
   rulesSong = loadSound(RULES_SONG);
   letsPlaySong = loadSound(LETS_PLAY_SONG);
   easyQuestionsSong = loadSound(EASY_QUESTIONS_SONG);
+}
+
+/* Load questions database */
+function LoadQuestions() {
+  let dbText = ReadTextFile("data/Q001.json");
+  questionsData = JSON.parse(dbText);
+  qdb = new QuestionsDB();
+  qdb.CreateFrom(questionsData);
+  questionsPool = qdb.RandomizePool(10);
+  currQuestion = questionsPool[currIndex];
 }
 
 /* MAIN */
@@ -164,6 +184,7 @@ function setup() {
   createCanvas(SCREEN_WIDTH, SCREEN_HEIGHT);
   frameRate(FPS);
   LoadSoundFiles();
+  LoadQuestions();
   SetGame();
 }
 
@@ -179,6 +200,7 @@ function draw() {
   }
   moneyTable.Draw();
   DrawLifelines();
+  mouseOver();
 }
 
 /* Keyboard Events */
@@ -190,6 +212,9 @@ function keyPressed() {
 
 /* Mouse Events */
 function mousePressed() {
+  if (!chooseState) {
+    return;
+  }
   // Check lifelines
   for (let lifeline of lifelines) {
     if (lifeline.IsClicked(mouseX, mouseY)) {
@@ -202,9 +227,21 @@ function mousePressed() {
   // Check answers
   for (let answer of answers) {
     if (answer.IsClicked(mouseX, mouseY)) {
-      // answer.SetChosen(true);
       answer.ChooseUnchoose();
       console.log(answer.txt + " was chosen");
+    }
+  }
+}
+
+function mouseOver() {
+  if (!chooseState) {
+    return;
+  }
+  for (let answer of answers) {
+    if (answer.IsFocus(mouseX, mouseY)) {
+      answer.SetMarked(true);
+    } else {
+      answer.SetMarked(false);
     }
   }
 }

@@ -9,6 +9,7 @@ class Answer {
     this.borderSize = borderSize;
     this.chosen = false;
     this.visible = false;
+    this.marked = false;
     this.backcolor = BLACK;
   }
 
@@ -73,7 +74,12 @@ class Answer {
     }
 
     // backcolor
-    fill(this.backcolor);
+    if (this.marked) {
+      fill(AQUA);
+    } else {
+      fill(this.backcolor);
+    }
+
     noStroke();
     rect(
       this.pos.x + this.h / 2,
@@ -140,7 +146,19 @@ class Answer {
 
   IsClicked(mouseX, mouseY) {
     let xAxis = mouseX > this.pos.x && mouseX < this.pos.x + this.w;
-    let yAxis = mouseY > this.pos.y && mouseY < this.pos.y + this.h;
+    let yAxis =
+      mouseY > this.pos.y - this.h / 2 && mouseY < this.pos.y + this.h / 2;
     return xAxis && yAxis;
+  }
+
+  IsFocus(mouseX, mouseY) {
+    let xAxis = mouseX > this.pos.x && mouseX < this.pos.x + this.w;
+    let yAxis =
+      mouseY > this.pos.y - this.h / 2 && mouseY < this.pos.y + this.h / 2;
+    return xAxis && yAxis;
+  }
+
+  SetMarked(value) {
+    this.marked = value;
   }
 }
