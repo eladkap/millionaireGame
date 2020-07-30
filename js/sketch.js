@@ -1,10 +1,11 @@
 /* GLOBALS */
-var game;
+var gameState;
 var question;
 var answers;
 var timer;
 var moneyTable;
 var lifelines;
+var msgbox;
 
 /* Sound */
 var rulesSong;
@@ -124,6 +125,14 @@ function SetLifelines() {
   lifelines.push(lifelineAudience);
 }
 
+function SetMessageBox() {
+  msgbox = new MessageBox(
+    MSG_BOX_POS_X,
+    MSG_BOX_POS_Y,
+    "Press ENTER to start the game"
+  );
+}
+
 function DrawAnswers() {
   for (let answer of answers) {
     answer.Draw();
@@ -143,6 +152,8 @@ function SetGame() {
   SetTimer();
   SetMoneyTable();
   SetLifelines();
+  SetMessageBox();
+  gameState = GAME_START;
 }
 
 async function ShowQuestionAndAnswers() {
@@ -158,7 +169,6 @@ async function ShowQuestionAndAnswers() {
     await Sleep(DELAY_ANSWER);
   }
   timer.Run();
-  chooseState = true;
 }
 
 /* Load Sound */
@@ -178,6 +188,15 @@ function LoadQuestions() {
   currQuestion = questionsPool[currIndex];
 }
 
+function CheckTimer() {
+  if (timer.value == 0) {
+    gameState = GAME_OVER;
+    console.log("Time's up!!!");
+    msgbox.SetText("Time's up!!!");
+    easyQuestionsSong.stop();
+  }
+}
+
 /* MAIN */
 function setup() {
   // createCanvas(windowWidth, windowHeight);
@@ -194,32 +213,35 @@ function draw() {
   DrawAnswers();
   timer.Draw();
   timer.Update();
-  if (timer.value == 0) {
-    console.log("Time's up!!!");
-    easyQuestionsSong.stop();
-  }
+  msgbox.Draw();
+  CheckTimer();
+
   moneyTable.Draw();
   DrawLifelines();
   mouseOver();
 }
 
 /* Keyboard Events */
-function keyPressed() {
-  if (keyCode === ENTER) {
-    ShowQuestionAndAnswers();
+async function keyPressed() {
+  if (gameState == GAME_START && keyCode === ENTER) {
+    gameState = GAME_SHOW_QUESTION;
+    await ShowQuestionAndAnswers();
+    console.log("Waiting for response");
+    gameState = GAME_WAIT_FOR_RESPONSE;
   }
 }
 
 /* Mouse Events */
 function mousePressed() {
-  if (!chooseState) {
+  if (gameState != GAME_WAIT_FOR_RESPONSE) {
+    console.log("Ignore");
     return;
   }
+  console.log("Get response");
   // Check lifelines
   for (let lifeline of lifelines) {
     if (lifeline.IsClicked(mouseX, mouseY)) {
-      // lifeline.SetChosen(true);
-      lifeline.ChooseUnchoose();
+      lifeline.SetChosen(true);
       console.log(lifeline.type + " was chosen");
     }
   }
@@ -227,7 +249,7 @@ function mousePressed() {
   // Check answers
   for (let answer of answers) {
     if (answer.IsClicked(mouseX, mouseY)) {
-      answer.ChooseUnchoose();
+      answer.SetChosen(true);
       console.log(answer.txt + " was chosen");
     }
   }

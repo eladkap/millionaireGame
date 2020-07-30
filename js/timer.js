@@ -56,7 +56,7 @@ class Timer {
       strokeWeight(1);
       textAlign(CENTER);
       textStyle(BOLD);
-      textFont("Copperplate Gothic");
+      textFont(FONT_FAMILY2);
       textSize(FONT_SIZE_BIG);
       text(this.value, this.pos.x, this.pos.y + this.r / 8);
     }

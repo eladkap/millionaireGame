@@ -1,8 +1,7 @@
 const SCREEN_WIDTH = 1280;
 const SCREEN_HEIGHT = 960;
 
-const FPS = 30;
-
+const FPS = 1;
 /* Colors */
 const BLACK = [0, 0, 0];
 const WHITE = [255, 255, 255];
@@ -89,17 +88,28 @@ const CURRENCY = "$";
 
 /* Font */
 const FONT_FAMILY = "Arial";
-const FONT_SIZE = [16, 20, 24, 28, 32, 36, 40];
+const FONT_FAMILY2 = "Copperplate Gothic";
+const FONT_SIZE = [16, 20, 24, 28, 32, 36, 40, 44, 50];
 const FONT_SIZE_BIG = 60;
 
 /* Lifeline */
 const LIFELINE_WIDTH = SCREEN_WIDTH * 0.05;
 const LIFELINE_HEIGHT = SCREEN_WIDTH * 0.025;
 const LIFELINE_BORDER = 5;
-const LIFELINE_POS_Y = SCREEN_WIDTH * 0.07;
+const LIFELINE_POS_Y = SCREEN_WIDTH * 0.09;
 const LIFELINE1_POS_X = SCREEN_WIDTH * 0.7;
 const LIFELINE2_POS_X = SCREEN_WIDTH * 0.82;
 const LIFELINE3_POS_X = SCREEN_WIDTH * 0.94;
+
+/* Message box */
+const MSG_BOX_POS_X = SCREEN_WIDTH * 0.5;
+const MSG_BOX_POS_Y = SCREEN_HEIGHT * 0.05;
+
+/* Game states */
+const GAME_OVER = -1;
+const GAME_START = 0;
+const GAME_SHOW_QUESTION = 1;
+const GAME_WAIT_FOR_RESPONSE = 2;
 
 /* DELAY */
 const DELAY = 1000;

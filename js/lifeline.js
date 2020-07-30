@@ -82,6 +82,14 @@ class LifeLine {
       vertex(this.pos.x + 20, this.pos.y + 10);
       vertex(this.pos.x, this.pos.y);
       endShape();
+    } else {
+      fill(WHITE);
+      noStroke();
+      textFont(FONT_FAMILY);
+      textAlign(CENTER);
+      textStyle(NORMAL);
+      textSize(FONT_SIZE[8]);
+      text(char(9743), this.pos.x, this.pos.y + this.h / 2);
     }
   }
 
@@ -91,10 +99,6 @@ class LifeLine {
 
   SetChosen(value) {
     this.chosen = value;
-  }
-
-  ChooseUnchoose() {
-    this.chosen = !this.chosen;
   }
 
   IsEnabled() {
