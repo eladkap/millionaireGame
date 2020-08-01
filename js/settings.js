@@ -110,6 +110,7 @@ const GAME_OVER = -1;
 const GAME_START = 0;
 const GAME_SHOW_QUESTION = 1;
 const GAME_WAIT_FOR_RESPONSE = 2;
+// const
 
 /* DELAY */
 const DELAY = 1000;
@@ -120,3 +121,4 @@ const DELAY_ANSWER = 1000;
 const RULES_SONG = "sound/Millionaire - Explain the Rules.mp3";
 const EASY_QUESTIONS_SONG = "sound/easy_questions.mp3";
 const LETS_PLAY_SONG = "sound/Lets Play.mp3";
+const CUT_5050_SOUND = "sound/5050.mp3";

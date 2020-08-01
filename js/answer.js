@@ -9,6 +9,7 @@ class Answer {
     this.borderSize = borderSize;
     this.chosen = false;
     this.visible = false;
+    this.enabled = true;
     this.marked = false;
     this.backcolor = BLACK;
   }
@@ -145,10 +146,25 @@ class Answer {
   }
 
   IsClicked(mouseX, mouseY) {
+    if (!this.enabled) {
+      return false;
+    }
     let xAxis = mouseX > this.pos.x && mouseX < this.pos.x + this.w;
     let yAxis =
       mouseY > this.pos.y - this.h / 2 && mouseY < this.pos.y + this.h / 2;
     return xAxis && yAxis;
+  }
+
+  IsEnabled() {
+    return this.enabled;
+  }
+
+  Enable() {
+    this.enabled = true;
+  }
+
+  Disable() {
+    this.enabled = false;
   }
 
   IsFocus(mouseX, mouseY) {

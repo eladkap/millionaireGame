@@ -11,6 +11,7 @@ var msgbox;
 var rulesSong;
 var letsPlaySong;
 var easyQuestionsSong;
+var cut5050Sound;
 
 /* Questions DB */
 var qdb;
@@ -176,6 +177,7 @@ function LoadSoundFiles() {
   rulesSong = loadSound(RULES_SONG);
   letsPlaySong = loadSound(LETS_PLAY_SONG);
   easyQuestionsSong = loadSound(EASY_QUESTIONS_SONG);
+  cut5050Sound = loadSound(CUT_5050_SOUND);
 }
 
 /* Load questions database */
@@ -195,6 +197,28 @@ function CheckTimer() {
     msgbox.SetText("Time's up!!!");
     easyQuestionsSong.stop();
   }
+}
+
+/* Lifeline Actions */
+function GetTwoRandomWrongAnswers(questionObj) {
+  let rightAnsLetter = questionObj.rightAnswer;
+  let wrongAnswerIndices = [0, 1, 2, 3];
+  let rightAnsIndex = rightAnsLetter.charCodeAt() - "A".charCodeAt();
+  wrongAnswerIndices.splice(rightAnsIndex, 1);
+  let wrongAnswerToBeLeftIndex = random([0, 1, 2]);
+  wrongAnswerIndices.splice(wrongAnswerToBeLeftIndex, 1);
+  return wrongAnswerIndices;
+}
+
+async function PerformLifeline5050() {
+  let wrongAnswerIndices = GetTwoRandomWrongAnswers(currQuestion);
+  for (answerIndex of wrongAnswerIndices) {
+    answers[answerIndex].Disable();
+    answers[answerIndex].SetVisible(false);
+  }
+  await Sleep(1000);
+  cut5050Sound.play();
+  lifelines[0].Disable();
 }
 
 /* MAIN */
@@ -238,11 +262,16 @@ function mousePressed() {
     return;
   }
   console.log("Get response");
+
   // Check lifelines
   for (let lifeline of lifelines) {
-    if (lifeline.IsClicked(mouseX, mouseY)) {
+    if (lifeline.IsClicked(mouseX, mouseY) && lifeline.IsEnabled()) {
       lifeline.SetChosen(true);
       console.log(lifeline.type + " was chosen");
+      if (lifeline.type == "50:50") {
+        console.log("50:50");
+        PerformLifeline5050();
+      }
     }
   }
 
