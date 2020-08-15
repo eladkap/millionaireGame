@@ -114,8 +114,7 @@ const GAME_WAIT_FOR_RESPONSE = 2;
 
 /* DELAY */
 const DELAY = 1000;
-const DELAY_QUESTION = 2000;
-const DELAY_ANSWER = 1000;
+const DELAY_ANSWER = 3000;
 
 /* Sound */
 const RULES_SONG = "sound/Millionaire - Explain the Rules.mp3";

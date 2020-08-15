@@ -12,6 +12,7 @@ class Answer {
     this.enabled = true;
     this.marked = false;
     this.backcolor = BLACK;
+    this.forecolor = WHITE;
   }
 
   Draw() {
@@ -75,10 +76,13 @@ class Answer {
     }
 
     // backcolor
+
     if (this.marked) {
-      fill(AQUA);
+      fill(ORANGE);
+      this.forecolor = BLACK;
     } else {
       fill(this.backcolor);
+      this.forecolor = WHITE;
     }
 
     noStroke();
@@ -115,7 +119,7 @@ class Answer {
       fill(DARKYELLOW);
       text(this.letter + ": ", this.pos.x + this.h / 2, this.pos.y + yOffset);
 
-      fill(WHITE);
+      fill(this.forecolor);
 
       text(this.txt, this.pos.x + this.h, this.pos.y + yOffset);
     }

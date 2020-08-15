@@ -13,6 +13,9 @@ var letsPlaySong;
 var easyQuestionsSong;
 var cut5050Sound;
 
+/* Speaker */
+var speech;
+
 /* Questions DB */
 var qdb;
 var questionsPool;
@@ -86,6 +89,29 @@ function SetTimer() {
   timer = new Timer(TIMER_POS_X, TIMER_POS_Y, TIMER_RADIUS, TIMER_VALUE);
 }
 
+function SetSpeech() {
+  speech = new p5.Speech();
+  let voices = speech.voices;
+  let voice = random(voices);
+  speech.setVoice("Alex");
+  speech.setVolume(1);
+  speech.setRate(0.7);
+  speech.setPitch(1);
+  // speech.onLoad = voiceReady;
+  // speech.started(StartedSpeaking);
+  // speech.ended(EndedSpeaking);
+}
+
+function StartedSpeaking() {
+  // fill(WHITE);
+  // ellipse(5, 5, 10, 10);
+}
+
+function EndedSpeaking() {
+  // fill(BLACK);
+  // ellipse(5, 5, 10, 10);
+}
+
 function SetMoneyTable() {
   moneyTable = new MoneyTable(
     MONEY_TABLE_POS_X,
@@ -154,20 +180,35 @@ function SetGame() {
   SetMoneyTable();
   SetLifelines();
   SetMessageBox();
+  SetSpeech();
   gameState = GAME_START;
 }
 
-async function ShowQuestionAndAnswers() {
+async function ShowQuestion() {
+  console.log(question.txt);
   letsPlaySong.play();
   await Sleep(5000);
   letsPlaySong.stop();
   await Sleep(DELAY);
   question.SetVisible(true);
   easyQuestionsSong.play();
-  await Sleep(DELAY_QUESTION);
+  speech.ended(ShowAnswers);
+  speech.speak(question.txt);
+}
+
+async function ShowAnswers() {
+  let wordsCount = question.txt.split(" ").length;
+  console.log("Words count: " + wordsCount);
+  // let delayQuestion = wordsCount * 500;
+  // await Sleep(delayQuestion);
+  console.log(answers.length);
   for (let answer of answers) {
+    console.log(answer.txt);
     answer.SetVisible(true);
-    await Sleep(DELAY_ANSWER);
+    answerDelay = answer.txt.split(" ").length * 500;
+    speech.speak(answer.txt);
+    await Sleep(answerDelay);
+    speech.stop();
   }
   timer.Run();
 }
@@ -178,6 +219,10 @@ function LoadSoundFiles() {
   letsPlaySong = loadSound(LETS_PLAY_SONG);
   easyQuestionsSong = loadSound(EASY_QUESTIONS_SONG);
   cut5050Sound = loadSound(CUT_5050_SOUND);
+  rulesSong.setVolume(0.5);
+  letsPlaySong.setVolume(0.5);
+  easyQuestionsSong.setVolume(0.5);
+  cut5050Sound.setVolume(0.5);
 }
 
 /* Load questions database */
@@ -217,8 +262,21 @@ async function PerformLifeline5050() {
     answers[answerIndex].SetVisible(false);
   }
   await Sleep(1000);
-  cut5050Sound.play();
   lifelines[0].Disable();
+  cut5050Sound.play();
+}
+
+async function ChooseAnswer() {
+  answer.SetMarked(true);
+  await Sleep(2);
+  if (currQuestion.rightAnswer == answer.letter) {
+    console.log("Right answer!");
+    // answer.SetRight();
+  } else {
+    console.log("Wrong answer!");
+    // answer.SetWrong();
+  }
+  console.log(answer.txt + " was chosen");
 }
 
 /* MAIN */
@@ -242,21 +300,26 @@ function draw() {
 
   moneyTable.Draw();
   DrawLifelines();
-  mouseOver();
+  // mouseOver();
 }
 
 /* Keyboard Events */
 async function keyPressed() {
   if (gameState == GAME_START && keyCode === ENTER) {
     gameState = GAME_SHOW_QUESTION;
-    await ShowQuestionAndAnswers();
+    msgbox.SetText("Show question");
+    await ShowQuestion();
     console.log("Waiting for response");
     gameState = GAME_WAIT_FOR_RESPONSE;
+    msgbox.SetText("Waiting for response...");
+  }
+  if (keyCode === ESCAPE) {
+    speech.speak("Escape already?");
   }
 }
 
 /* Mouse Events */
-function mousePressed() {
+async function mousePressed() {
   if (gameState != GAME_WAIT_FOR_RESPONSE) {
     console.log("Ignore");
     return;
@@ -278,8 +341,7 @@ function mousePressed() {
   // Check answers
   for (let answer of answers) {
     if (answer.IsClicked(mouseX, mouseY)) {
-      answer.SetChosen(true);
-      console.log(answer.txt + " was chosen");
+      await ChooseAnswer(answer);
     }
   }
 }
