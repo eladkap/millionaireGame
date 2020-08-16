@@ -105,19 +105,30 @@ const LIFELINE3_POS_X = SCREEN_WIDTH * 0.94;
 const MSG_BOX_POS_X = SCREEN_WIDTH * 0.5;
 const MSG_BOX_POS_Y = SCREEN_HEIGHT * 0.05;
 
+/* Buttons */
+const YES_BUTTON_POS_X = SCREEN_WIDTH * 0.4;
+const YES_BUTTON_POS_Y = SCREEN_WIDTH * 0.1;
+const NO_BUTTON_POS_X = SCREEN_WIDTH * 0.55;
+const NO_BUTTON_POS_Y = SCREEN_WIDTH * 0.1;
+const BUTTON_WIDTH = SCREEN_WIDTH * 0.05;
+const BUTTON_HEIGHT = SCREEN_HEIGHT * 0.025;
+
 /* Game states */
 const GAME_OVER = -1;
 const GAME_START = 0;
 const GAME_SHOW_QUESTION = 1;
 const GAME_WAIT_FOR_RESPONSE = 2;
-// const
+const GAME_FINAL_ANSWER = 3;
 
 /* DELAY */
 const DELAY = 1000;
 const DELAY_ANSWER = 3000;
+const CHOOSE_ANSWER_DELAY = 3000;
 
 /* Sound */
 const RULES_SONG = "sound/Millionaire - Explain the Rules.mp3";
 const EASY_QUESTIONS_SONG = "sound/easy_questions.mp3";
 const LETS_PLAY_SONG = "sound/Lets Play.mp3";
 const CUT_5050_SOUND = "sound/5050.mp3";
+const EASY_QUESTIONS_RIGHT_ANSWER = "sound/easy_right_answer.mp3";
+const LOSE_SOUND = "sound/lose.mp3";

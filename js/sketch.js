@@ -6,6 +6,8 @@ var timer;
 var moneyTable;
 var lifelines;
 var msgbox;
+var yesButton;
+var noButton;
 
 /* Sound */
 var rulesSong;
@@ -160,6 +162,25 @@ function SetMessageBox() {
   );
 }
 
+function SetButtons() {
+  yesButton = new Button(
+    YES_BUTTON_POS_X,
+    YES_BUTTON_POS_Y,
+    BUTTON_WIDTH,
+    BUTTON_HEIGHT,
+    "Yes",
+    1
+  );
+  noButton = new Button(
+    NO_BUTTON_POS_X,
+    NO_BUTTON_POS_Y,
+    BUTTON_WIDTH,
+    BUTTON_HEIGHT,
+    "No",
+    1
+  );
+}
+
 function DrawAnswers() {
   for (let answer of answers) {
     answer.Draw();
@@ -172,6 +193,11 @@ function DrawLifelines() {
   }
 }
 
+function DrawButtons() {
+  yesButton.Draw();
+  noButton.Draw();
+}
+
 /* Game Functions */
 function SetGame() {
   SetQuestion();
@@ -180,7 +206,7 @@ function SetGame() {
   SetMoneyTable();
   SetLifelines();
   SetMessageBox();
-  SetSpeech();
+  SetButtons();
   gameState = GAME_START;
 }
 
@@ -192,24 +218,44 @@ async function ShowQuestion() {
   await Sleep(DELAY);
   question.SetVisible(true);
   easyQuestionsSong.play();
-  speech.ended(ShowAnswers);
+  speech.ended(ShowAnswerA);
   speech.speak(question.txt);
 }
 
-async function ShowAnswers() {
-  let wordsCount = question.txt.split(" ").length;
-  console.log("Words count: " + wordsCount);
-  // let delayQuestion = wordsCount * 500;
-  // await Sleep(delayQuestion);
-  console.log(answers.length);
-  for (let answer of answers) {
-    console.log(answer.txt);
-    answer.SetVisible(true);
-    answerDelay = answer.txt.split(" ").length * 500;
-    speech.speak(answer.txt);
-    await Sleep(answerDelay);
-    speech.stop();
-  }
+async function ShowAnswerA() {
+  let answer = answers[0];
+  console.log(answer.txt);
+  answer.SetVisible(true);
+  speech.ended(ShowAnswerB);
+  speech.speak(answer.txt);
+}
+
+async function ShowAnswerB() {
+  let answer = answers[1];
+  console.log(answer.txt);
+  answer.SetVisible(true);
+  speech.ended(ShowAnswerC);
+  speech.speak(answer.txt);
+}
+
+async function ShowAnswerC() {
+  let answer = answers[2];
+  console.log(answer.txt);
+  answer.SetVisible(true);
+  speech.ended(ShowAnswerD);
+  speech.speak(answer.txt);
+}
+
+async function ShowAnswerD() {
+  let answer = answers[3];
+  console.log(answer.txt);
+  answer.SetVisible(true);
+  speech.ended(StartClock);
+  speech.speak(answer.txt);
+  timer.Run();
+}
+
+function StartClock() {
   timer.Run();
 }
 
@@ -219,10 +265,14 @@ function LoadSoundFiles() {
   letsPlaySong = loadSound(LETS_PLAY_SONG);
   easyQuestionsSong = loadSound(EASY_QUESTIONS_SONG);
   cut5050Sound = loadSound(CUT_5050_SOUND);
+  easyRightSound = loadSound(EASY_QUESTIONS_RIGHT_ANSWER);
+  loseSound = loadSound(LOSE_SOUND);
   rulesSong.setVolume(0.5);
   letsPlaySong.setVolume(0.5);
   easyQuestionsSong.setVolume(0.5);
   cut5050Sound.setVolume(0.5);
+  easyRightSound.setVolume(0.5);
+  loseSound.setVolume(0.5);
 }
 
 /* Load questions database */
@@ -255,36 +305,88 @@ function GetTwoRandomWrongAnswers(questionObj) {
   return wrongAnswerIndices;
 }
 
+async function PrepareLifeline5050() {
+  speech.ended(PerformLifeline5050);
+  speech.speak("The computer is about to take away two random wrong answers.");
+}
+
 async function PerformLifeline5050() {
+  await Sleep(1000);
   let wrongAnswerIndices = GetTwoRandomWrongAnswers(currQuestion);
   for (answerIndex of wrongAnswerIndices) {
     answers[answerIndex].Disable();
     answers[answerIndex].SetVisible(false);
   }
-  await Sleep(1000);
   lifelines[0].Disable();
   cut5050Sound.play();
 }
 
-async function ChooseAnswer() {
+function ShowYesNoButtons() {
+  yesButton.Enable();
+  yesButton.SetVisible(true);
+  noButton.Enable();
+  noButton.SetVisible(true);
+}
+
+function HideYesNoButtons() {
+  yesButton.Disable();
+  yesButton.SetVisible(false);
+  noButton.Disable();
+  noButton.SetVisible(false);
+}
+
+async function ChooseAnswer(answer) {
   answer.SetMarked(true);
-  await Sleep(2);
+  speech.speak("You say " + answer.txt + ". " + "Is it you final answer?");
+  gameState = GAME_FINAL_ANSWER;
+  msgbox.SetText("Final answer?");
+  ShowYesNoButtons();
+}
+
+async function CheckRightAnswer() {
   if (currQuestion.rightAnswer == answer.letter) {
-    console.log("Right answer!");
-    // answer.SetRight();
+    RightAnswerChosen();
   } else {
-    console.log("Wrong answer!");
-    // answer.SetWrong();
+    WrongQuestionChosen();
   }
-  console.log(answer.txt + " was chosen");
+  HideYesNoButtons();
+}
+
+async function RightAnswerChosen(answer) {
+  speech.speak("You right!!!");
+  easyRightSound.play();
+  gameState = GAME_SHOW_QUESTION;
+}
+
+async function WrongQuestionChosen(answer) {
+  speech.ended(ShowRightAnswer);
+  speech.speak("sorry, You are wrong.");
+  answer.SetBackcolor(RED);
+  loseSound.play();
+}
+
+async function ShowRightAnswer() {
+  let rightAnsLetter = currQuestion.rightAnswer;
+  let rightAnsIndex = rightAnsLetter.charCodeAt() - "A".charCodeAt();
+  let rightAnswerObj = currQuestion[rightAnsIndex];
+  speech.speak(
+    "But, the right answer is " +
+      rightAnswerObj.letter +
+      ", " +
+      rightAnswerObj.txt
+  );
 }
 
 /* MAIN */
+function preload() {
+  LoadSoundFiles();
+  SetSpeech();
+}
+
 function setup() {
   // createCanvas(windowWidth, windowHeight);
   createCanvas(SCREEN_WIDTH, SCREEN_HEIGHT);
   frameRate(FPS);
-  LoadSoundFiles();
   LoadQuestions();
   SetGame();
 }
@@ -300,6 +402,7 @@ function draw() {
 
   moneyTable.Draw();
   DrawLifelines();
+  DrawButtons();
   // mouseOver();
 }
 
@@ -307,6 +410,7 @@ function draw() {
 async function keyPressed() {
   if (gameState == GAME_START && keyCode === ENTER) {
     gameState = GAME_SHOW_QUESTION;
+    HideYesNoButtons();
     msgbox.SetText("Show question");
     await ShowQuestion();
     console.log("Waiting for response");
@@ -324,6 +428,16 @@ async function mousePressed() {
     console.log("Ignore");
     return;
   }
+
+  if (gameState == GAME_FINAL_ANSWER) {
+    if (yesButton.IsClicked(mouseX, mouseY)) {
+      console.log("Yes button was clicked.");
+      CheckRightAnswer();
+    }
+    if (noButton.IsClicked(mouseX, mouseY)) {
+      console.log("No button was clicked.");
+    }
+  }
   console.log("Get response");
 
   // Check lifelines
@@ -333,7 +447,7 @@ async function mousePressed() {
       console.log(lifeline.type + " was chosen");
       if (lifeline.type == "50:50") {
         console.log("50:50");
-        PerformLifeline5050();
+        PrepareLifeline5050();
       }
     }
   }

@@ -114,6 +114,9 @@ class LifeLine {
   }
 
   IsClicked(mouseX, mouseY) {
+    if (!this.enabled) {
+      return false;
+    }
     return (
       ((mouseX - this.pos.x) * (mouseX - this.pos.x)) / (this.w * this.w) +
         ((mouseY - this.pos.y) * (mouseY - this.pos.y)) / (this.h * this.h) <=
