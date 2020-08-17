@@ -27,6 +27,10 @@ class Timer {
     this.visible = value;
   }
 
+  Reset() {
+    this.value = TIMER_VALUE;
+  }
+
   Draw() {
     if (this.visible) {
       // Inner ring
@@ -75,7 +79,7 @@ class Timer {
     return this.running;
   }
 
-  SetRunning(value) {
-    this.running = value;
-  }
+  // SetRunning(value) {
+  //   this.running = value;
+  // }
 }

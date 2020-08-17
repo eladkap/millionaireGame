@@ -1,7 +1,9 @@
 /* GLOBALS */
 var gameState;
 var question;
+var currQuestionIndex;
 var answers;
+var chosenAnswer;
 var timer;
 var moneyTable;
 var lifelines;
@@ -23,9 +25,6 @@ var qdb;
 var questionsPool;
 var currQuestion;
 var currIndex = 0;
-
-/* Flag indicates the user to choose an action */
-var chooseState = false;
 
 function SetQuestion() {
   question = new Question(
@@ -166,16 +165,14 @@ function SetButtons() {
   yesButton = new Button(
     YES_BUTTON_POS_X,
     YES_BUTTON_POS_Y,
-    BUTTON_WIDTH,
-    BUTTON_HEIGHT,
+    BUTTON_RADIUS,
     "Yes",
     1
   );
   noButton = new Button(
     NO_BUTTON_POS_X,
     NO_BUTTON_POS_Y,
-    BUTTON_WIDTH,
-    BUTTON_HEIGHT,
+    BUTTON_RADIUS,
     "No",
     1
   );
@@ -208,14 +205,16 @@ function SetGame() {
   SetMessageBox();
   SetButtons();
   gameState = GAME_START;
+  currQuestionIndex = 0;
 }
 
 async function ShowQuestion() {
   console.log(question.txt);
-  letsPlaySong.play();
-  await Sleep(5000);
-  letsPlaySong.stop();
-  await Sleep(DELAY);
+  if (currQuestionIndex == 0) {
+    letsPlaySong.play();
+    await Sleep(5000);
+    letsPlaySong.stop();
+  }
   question.SetVisible(true);
   easyQuestionsSong.play();
   speech.ended(ShowAnswerA);
@@ -319,6 +318,8 @@ async function PerformLifeline5050() {
   }
   lifelines[0].Disable();
   cut5050Sound.play();
+  await Sleep(2);
+  cut5050Sound.stop();
 }
 
 function ShowYesNoButtons() {
@@ -335,8 +336,9 @@ function HideYesNoButtons() {
   noButton.SetVisible(false);
 }
 
-async function ChooseAnswer(answer) {
-  answer.SetMarked(true);
+function ChooseAnswer(answer) {
+  chosenAnswer = answer;
+  answer.SetBackcolor(ORANGE);
   speech.speak("You say " + answer.txt + ". " + "Is it you final answer?");
   gameState = GAME_FINAL_ANSWER;
   msgbox.SetText("Final answer?");
@@ -344,7 +346,7 @@ async function ChooseAnswer(answer) {
 }
 
 async function CheckRightAnswer() {
-  if (currQuestion.rightAnswer == answer.letter) {
+  if (currQuestion.rightAnswer == chosenAnswer.letter) {
     RightAnswerChosen();
   } else {
     WrongQuestionChosen();
@@ -353,28 +355,45 @@ async function CheckRightAnswer() {
 }
 
 async function RightAnswerChosen(answer) {
-  speech.speak("You right!!!");
+  moneyTable.IncreasePrize();
   easyRightSound.play();
+  speech.speak("You right! you have " + moneyTable.CurrentPrize() + "dollars");
   gameState = GAME_SHOW_QUESTION;
+  chosenAnswer.SetBackcolor(GREEN);
+  await Sleep(5000);
+  speech.stop();
+  await NextQuestion();
 }
 
-async function WrongQuestionChosen(answer) {
+async function WrongQuestionChosen() {
+  easyQuestionsSong.stop();
+  await Sleep(1000);
+  gameState = GAME_OVER;
   speech.ended(ShowRightAnswer);
   speech.speak("sorry, You are wrong.");
-  answer.SetBackcolor(RED);
+  chosenAnswer.SetBackcolor(RED);
   loseSound.play();
 }
 
 async function ShowRightAnswer() {
   let rightAnsLetter = currQuestion.rightAnswer;
   let rightAnsIndex = rightAnsLetter.charCodeAt() - "A".charCodeAt();
-  let rightAnswerObj = currQuestion[rightAnsIndex];
+  let rightAnswerObj = answers[rightAnsIndex];
+  rightAnswerObj.SetBackcolor(GREEN);
+  speech.ended(ShowFinalPrize);
   speech.speak(
-    "But, the right answer is " +
+    "Because, the right answer is " +
       rightAnswerObj.letter +
       ", " +
       rightAnswerObj.txt
   );
+}
+
+async function ShowFinalPrize() {
+  let prize = CheckPointPrize(currQuestionIndex);
+  speech.speak("Your final price is: " + prize + "dollars.");
+  await Sleep(5000);
+  speech.stop();
 }
 
 /* MAIN */
@@ -406,6 +425,20 @@ function draw() {
   // mouseOver();
 }
 
+async function NextQuestion() {
+  currQuestionIndex++;
+  currQuestion = questionsPool[currQuestionIndex];
+  SetQuestion();
+  SetAnswers();
+  timer.Stop();
+  timer.Reset();
+  HideYesNoButtons();
+  gameState = GAME_START;
+  easyQuestionsSong.stop();
+  await ShowQuestion();
+  gameState = GAME_WAIT_FOR_RESPONSE;
+}
+
 /* Keyboard Events */
 async function keyPressed() {
   if (gameState == GAME_START && keyCode === ENTER) {
@@ -424,21 +457,23 @@ async function keyPressed() {
 
 /* Mouse Events */
 async function mousePressed() {
-  if (gameState != GAME_WAIT_FOR_RESPONSE) {
-    console.log("Ignore");
-    return;
-  }
-
+  // Check yes/no buttons
   if (gameState == GAME_FINAL_ANSWER) {
+    console.log("check buttons");
     if (yesButton.IsClicked(mouseX, mouseY)) {
       console.log("Yes button was clicked.");
-      CheckRightAnswer();
+      await CheckRightAnswer();
     }
     if (noButton.IsClicked(mouseX, mouseY)) {
       console.log("No button was clicked.");
     }
+    return;
   }
-  console.log("Get response");
+
+  if (gameState != GAME_WAIT_FOR_RESPONSE) {
+    console.log("Ignore");
+    return;
+  }
 
   // Check lifelines
   for (let lifeline of lifelines) {
@@ -455,13 +490,13 @@ async function mousePressed() {
   // Check answers
   for (let answer of answers) {
     if (answer.IsClicked(mouseX, mouseY)) {
-      await ChooseAnswer(answer);
+      ChooseAnswer(answer);
     }
   }
 }
 
 function mouseOver() {
-  if (!chooseState) {
+  if (gameState != GAME_WAIT_FOR_RESPONSE) {
     return;
   }
   for (let answer of answers) {
@@ -470,5 +505,15 @@ function mouseOver() {
     } else {
       answer.SetMarked(false);
     }
+  }
+  if (yesButton.IsFocus(mouseX, mouseY)) {
+    yesButton.SetBackcolor(AQUA);
+  } else {
+    yesButton.SetBackcolor(DARKBLUE);
+  }
+  if (noButton.IsFocus(mouseX, mouseY)) {
+    noButton.SetBackcolor(AQUA);
+  } else {
+    noButton.SetBackcolor(DARKBLUE);
   }
 }

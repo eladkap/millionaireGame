@@ -76,14 +76,15 @@ class Answer {
     }
 
     // backcolor
+    fill(this.backcolor);
 
-    if (this.marked) {
-      fill(ORANGE);
-      this.forecolor = BLACK;
-    } else {
-      fill(this.backcolor);
-      this.forecolor = WHITE;
-    }
+    // if (this.marked) {
+    //   fill(ORANGE);
+    //   this.forecolor = BLACK;
+    // } else {
+    //   fill(this.backcolor);
+    //   this.forecolor = WHITE;
+    // }
 
     noStroke();
     rect(

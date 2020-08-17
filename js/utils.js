@@ -16,3 +16,16 @@ function ReadTextFile(file) {
   rawFile.send(null);
   return allText;
 }
+
+function CheckPointPrize(questionIndex) {
+  let currPrize = parseInt(MONEY_VALUES[questionIndex].replace(",", ""));
+  if (currPrize < 1000) {
+    return 0;
+  }
+  if (countPrize < 32000) {
+    return 1000;
+  }
+  if (countPrize < 1000000) {
+    return 32000;
+  }
+}

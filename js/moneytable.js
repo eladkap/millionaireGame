@@ -56,4 +56,15 @@ class MoneyTable {
   SetVisible(value) {
     this.visible = value;
   }
+
+  IncreasePrize() {
+    this.current++;
+  }
+
+  CurrentPrize() {
+    if (this.current >= 0) {
+      return MONEY_VALUES[this.current];
+    }
+    return 0;
+  }
 }

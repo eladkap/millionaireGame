@@ -1,13 +1,13 @@
 class Button {
-  constructor(x, y, w, h, caption, borderSize) {
+  constructor(x, y, r, caption, borderSize) {
     this.pos = createVector(x, y);
-    this.w = w;
-    this.h = h;
+    this.r = r;
     this.caption = caption;
     this.borderSize = borderSize;
     this.chosen = false;
     this.enabled = true;
     this.visible = true;
+    this.backcolor = DARKBLUE;
   }
 
   Draw() {
@@ -20,9 +20,9 @@ class Button {
     if (this.chosen) {
       fill(ORANGE);
     } else {
-      fill(DARKBLUE);
+      fill(this.backcolor);
     }
-    ellipse(this.pos.x, this.pos.y, 2 * this.w, 2 * this.h);
+    ellipse(this.pos.x, this.pos.y, 2 * this.r, 2 * this.r);
 
     fill(WHITE);
     noStroke();
@@ -30,7 +30,11 @@ class Button {
     textAlign(CENTER);
     textStyle(NORMAL);
     textSize(FONT_SIZE[3]);
-    text(this.caption, this.pos.x, this.pos.y + this.h / 3);
+    text(this.caption, this.pos.x, this.pos.y + this.r / 5);
+  }
+
+  SetBackground(backcolor) {
+    this.backcolor = backcolor;
   }
 
   IsChosen() {
@@ -57,14 +61,19 @@ class Button {
     this.visible = value;
   }
 
-  IsClicked(mouseX, mouseY) {
-    // if (this.enabled) {
-    //   return false;
-    // }
+  IsFocus(mouseX, mouseY) {
     return (
-      ((mouseX - this.pos.x) * (mouseX - this.pos.x)) / (this.w * this.w) +
-        ((mouseY - this.pos.y) * (mouseY - this.pos.y)) / (this.h * this.h) <=
-      1
+      (mouseX - this.pos.x) * (mouseX - this.pos.x) +
+        (mouseY - this.pos.y) * (mouseY - this.pos.y) <=
+      this.r * this.r
+    );
+  }
+
+  IsClicked(mouseX, mouseY) {
+    return (
+      (mouseX - this.pos.x) * (mouseX - this.pos.x) +
+        (mouseY - this.pos.y) * (mouseY - this.pos.y) <=
+      this.r * this.r
     );
   }
 }
