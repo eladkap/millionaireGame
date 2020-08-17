@@ -15,6 +15,9 @@ var noButton;
 var rulesSong;
 var letsPlaySong;
 var easyQuestionsSong;
+var mediumQuestionsSong;
+var hardQuestionsSong;
+var questionsSong;
 var cut5050Sound;
 
 /* Speaker */
@@ -210,13 +213,16 @@ function SetGame() {
 
 async function ShowQuestion() {
   console.log(question.txt);
+  questionsSong = questionsSongs[int(currQuestionIndex / 5)];
+
+  // speech.setRate(speech.getRate(0.5));
   if (currQuestionIndex == 0) {
     letsPlaySong.play();
     await Sleep(5000);
     letsPlaySong.stop();
   }
   question.SetVisible(true);
-  easyQuestionsSong.play();
+  questionsSong.play();
   speech.ended(ShowAnswerA);
   speech.speak(question.txt);
 }
@@ -251,7 +257,7 @@ async function ShowAnswerD() {
   answer.SetVisible(true);
   speech.ended(StartClock);
   speech.speak(answer.txt);
-  timer.Run();
+  // timer.Run();
 }
 
 function StartClock() {
@@ -263,15 +269,22 @@ function LoadSoundFiles() {
   rulesSong = loadSound(RULES_SONG);
   letsPlaySong = loadSound(LETS_PLAY_SONG);
   easyQuestionsSong = loadSound(EASY_QUESTIONS_SONG);
+  mediumQuestionsSong = loadSound(MEDIUM_QUESTIONS_SONG);
+  hardQuestionsSong = loadSound(HARD_QUESTIONS_SONG);
   cut5050Sound = loadSound(CUT_5050_SOUND);
   easyRightSound = loadSound(EASY_QUESTIONS_RIGHT_ANSWER);
   loseSound = loadSound(LOSE_SOUND);
+
   rulesSong.setVolume(0.5);
   letsPlaySong.setVolume(0.5);
   easyQuestionsSong.setVolume(0.5);
+  mediumQuestionsSong.setVolume(0.5);
+  hardQuestionsSong.setVolume(0.5);
   cut5050Sound.setVolume(0.5);
   easyRightSound.setVolume(0.5);
   loseSound.setVolume(0.5);
+
+  questionsSongs = [easyQuestionsSong, mediumQuestionsSong, hardQuestionsSong];
 }
 
 /* Load questions database */
@@ -289,7 +302,7 @@ function CheckTimer() {
     gameState = GAME_OVER;
     console.log("Time's up!!!");
     msgbox.SetText("Time's up!!!");
-    easyQuestionsSong.stop();
+    questionsSong.stop();
   }
 }
 
@@ -318,7 +331,7 @@ async function PerformLifeline5050() {
   }
   lifelines[0].Disable();
   cut5050Sound.play();
-  await Sleep(2);
+  await Sleep(2000);
   cut5050Sound.stop();
 }
 
@@ -339,7 +352,7 @@ function HideYesNoButtons() {
 function ChooseAnswer(answer) {
   chosenAnswer = answer;
   answer.SetBackcolor(ORANGE);
-  speech.speak("You say " + answer.txt + ". " + "Is it you final answer?");
+  speech.speak("You say " + answer.txt + ". " + "Final answer?");
   gameState = GAME_FINAL_ANSWER;
   msgbox.SetText("Final answer?");
   ShowYesNoButtons();
@@ -366,7 +379,7 @@ async function RightAnswerChosen(answer) {
 }
 
 async function WrongQuestionChosen() {
-  easyQuestionsSong.stop();
+  questionsSong.stop();
   await Sleep(1000);
   gameState = GAME_OVER;
   speech.ended(ShowRightAnswer);
@@ -434,7 +447,7 @@ async function NextQuestion() {
   timer.Reset();
   HideYesNoButtons();
   gameState = GAME_START;
-  easyQuestionsSong.stop();
+  questionsSong.stop();
   await ShowQuestion();
   gameState = GAME_WAIT_FOR_RESPONSE;
 }
@@ -442,6 +455,7 @@ async function NextQuestion() {
 /* Keyboard Events */
 async function keyPressed() {
   if (gameState == GAME_START && keyCode === ENTER) {
+    questionsSong = questionsSongs[0];
     gameState = GAME_SHOW_QUESTION;
     HideYesNoButtons();
     msgbox.SetText("Show question");

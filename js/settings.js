@@ -135,6 +135,8 @@ const CHOOSE_ANSWER_DELAY = 3000;
 /* Sound */
 const RULES_SONG = "sound/Millionaire - Explain the Rules.mp3";
 const EASY_QUESTIONS_SONG = "sound/easy_questions.mp3";
+const MEDIUM_QUESTIONS_SONG = "sound/medium_questions.mp3";
+const HARD_QUESTIONS_SONG = "sound/hard_questions.mp3";
 const LETS_PLAY_SONG = "sound/Lets Play.mp3";
 const CUT_5050_SOUND = "sound/5050.mp3";
 const EASY_QUESTIONS_RIGHT_ANSWER = "sound/easy_right_answer.mp3";
