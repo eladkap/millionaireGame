@@ -56,8 +56,7 @@ class Answer {
       this.pos.x + this.w + this.h / 2,
       this.pos.y
     );
-    let l =
-      this.letter == "B" || this.letter == "D" ? this.h * 3 : this.h * 0.8;
+    let l = this.letter == "B" || this.letter == "D" ? this.h * 3 : this.h * 2;
     line(
       this.pos.x + this.w + this.h / 2,
       this.pos.y,
@@ -75,16 +74,7 @@ class Answer {
       yOffset = -5;
     }
 
-    // backcolor
     fill(this.backcolor);
-
-    // if (this.marked) {
-    //   fill(ORANGE);
-    //   this.forecolor = BLACK;
-    // } else {
-    //   fill(this.backcolor);
-    //   this.forecolor = WHITE;
-    // }
 
     noStroke();
     rect(

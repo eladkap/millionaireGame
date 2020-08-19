@@ -18,10 +18,11 @@ var easyQuestionsSong;
 var mediumQuestionsSong;
 var hardQuestionsSong;
 var questionsSong;
+var questionsSongs;
 var cut5050Sound;
 
 /* Speaker */
-var speech;
+var speaker;
 
 /* Questions DB */
 var qdb;
@@ -93,27 +94,8 @@ function SetTimer() {
   timer = new Timer(TIMER_POS_X, TIMER_POS_Y, TIMER_RADIUS, TIMER_VALUE);
 }
 
-function SetSpeech() {
-  speech = new p5.Speech();
-  let voices = speech.voices;
-  let voice = random(voices);
-  speech.setVoice("Alex");
-  speech.setVolume(1);
-  speech.setRate(0.7);
-  speech.setPitch(1);
-  // speech.onLoad = voiceReady;
-  // speech.started(StartedSpeaking);
-  // speech.ended(EndedSpeaking);
-}
-
-function StartedSpeaking() {
-  // fill(WHITE);
-  // ellipse(5, 5, 10, 10);
-}
-
-function EndedSpeaking() {
-  // fill(BLACK);
-  // ellipse(5, 5, 10, 10);
+function SetSpeaker() {
+  speaker = new Speaker("Alex");
 }
 
 function SetMoneyTable() {
@@ -215,7 +197,7 @@ async function ShowQuestion() {
   console.log(question.txt);
   questionsSong = questionsSongs[int(currQuestionIndex / 5)];
 
-  // speech.setRate(speech.getRate(0.5));
+  // speaker.SetRate(0.7);
   if (currQuestionIndex == 0) {
     letsPlaySong.play();
     await Sleep(5000);
@@ -223,40 +205,40 @@ async function ShowQuestion() {
   }
   question.SetVisible(true);
   questionsSong.play();
-  speech.ended(ShowAnswerA);
-  speech.speak(question.txt);
+  speaker.SetCallback(ShowAnswerA);
+  speaker.Say(question.txt);
 }
 
 async function ShowAnswerA() {
   let answer = answers[0];
   console.log(answer.txt);
   answer.SetVisible(true);
-  speech.ended(ShowAnswerB);
-  speech.speak(answer.txt);
+  speaker.SetCallback(ShowAnswerB);
+  speaker.Say(answer.txt);
 }
 
 async function ShowAnswerB() {
   let answer = answers[1];
   console.log(answer.txt);
   answer.SetVisible(true);
-  speech.ended(ShowAnswerC);
-  speech.speak(answer.txt);
+  speaker.SetCallback(ShowAnswerC);
+  speaker.Say(answer.txt);
 }
 
 async function ShowAnswerC() {
   let answer = answers[2];
   console.log(answer.txt);
   answer.SetVisible(true);
-  speech.ended(ShowAnswerD);
-  speech.speak(answer.txt);
+  speaker.SetCallback(ShowAnswerD);
+  speaker.Say(answer.txt);
 }
 
 async function ShowAnswerD() {
   let answer = answers[3];
   console.log(answer.txt);
   answer.SetVisible(true);
-  speech.ended(StartClock);
-  speech.speak(answer.txt);
+  speaker.SetCallback(StartClock);
+  speaker.Say(answer.txt);
   // timer.Run();
 }
 
@@ -318,8 +300,8 @@ function GetTwoRandomWrongAnswers(questionObj) {
 }
 
 async function PrepareLifeline5050() {
-  speech.ended(PerformLifeline5050);
-  speech.speak("The computer is about to take away two random wrong answers.");
+  speaker.SetCallback(PerformLifeline5050);
+  speaker.Say("The computer is about to take away two random wrong answers.");
 }
 
 async function PerformLifeline5050() {
@@ -352,7 +334,7 @@ function HideYesNoButtons() {
 function ChooseAnswer(answer) {
   chosenAnswer = answer;
   answer.SetBackcolor(ORANGE);
-  speech.speak("You say " + answer.txt + ". " + "Final answer?");
+  speaker.Say("You say " + answer.txt + ". " + "Final answer?");
   gameState = GAME_FINAL_ANSWER;
   msgbox.SetText("Final answer?");
   ShowYesNoButtons();
@@ -370,11 +352,11 @@ async function CheckRightAnswer() {
 async function RightAnswerChosen(answer) {
   moneyTable.IncreasePrize();
   easyRightSound.play();
-  speech.speak("You right! you have " + moneyTable.CurrentPrize() + "dollars");
+  speaker.Say("You right! you have " + moneyTable.CurrentPrize() + "dollars");
   gameState = GAME_SHOW_QUESTION;
   chosenAnswer.SetBackcolor(GREEN);
   await Sleep(5000);
-  speech.stop();
+  speaker.Stop();
   await NextQuestion();
 }
 
@@ -382,8 +364,8 @@ async function WrongQuestionChosen() {
   questionsSong.stop();
   await Sleep(1000);
   gameState = GAME_OVER;
-  speech.ended(ShowRightAnswer);
-  speech.speak("sorry, You are wrong.");
+  speaker.SetCallback(ShowRightAnswer);
+  speaker.Say("sorry, You are wrong.");
   chosenAnswer.SetBackcolor(RED);
   loseSound.play();
 }
@@ -393,8 +375,8 @@ async function ShowRightAnswer() {
   let rightAnsIndex = rightAnsLetter.charCodeAt() - "A".charCodeAt();
   let rightAnswerObj = answers[rightAnsIndex];
   rightAnswerObj.SetBackcolor(GREEN);
-  speech.ended(ShowFinalPrize);
-  speech.speak(
+  speaker.SetCallback(ShowFinalPrize);
+  speaker.Say(
     "Because, the right answer is " +
       rightAnswerObj.letter +
       ", " +
@@ -404,15 +386,15 @@ async function ShowRightAnswer() {
 
 async function ShowFinalPrize() {
   let prize = CheckPointPrize(currQuestionIndex);
-  speech.speak("Your final price is: " + prize + "dollars.");
+  speaker.Say("Your final price is: " + prize + "dollars.");
   await Sleep(5000);
-  speech.stop();
+  speaker.stop();
 }
 
 /* MAIN */
 function preload() {
   LoadSoundFiles();
-  SetSpeech();
+  SetSpeaker();
 }
 
 function setup() {
@@ -429,13 +411,11 @@ function draw() {
   DrawAnswers();
   timer.Draw();
   timer.Update();
-  msgbox.Draw();
+  // msgbox.Draw();
   CheckTimer();
-
   moneyTable.Draw();
   DrawLifelines();
   DrawButtons();
-  // mouseOver();
 }
 
 async function NextQuestion() {
@@ -465,7 +445,7 @@ async function keyPressed() {
     msgbox.SetText("Waiting for response...");
   }
   if (keyCode === ESCAPE) {
-    speech.speak("Escape already?");
+    speaker.Say("Escape already?");
   }
 }
 
@@ -506,28 +486,5 @@ async function mousePressed() {
     if (answer.IsClicked(mouseX, mouseY)) {
       ChooseAnswer(answer);
     }
-  }
-}
-
-function mouseOver() {
-  if (gameState != GAME_WAIT_FOR_RESPONSE) {
-    return;
-  }
-  for (let answer of answers) {
-    if (answer.IsFocus(mouseX, mouseY)) {
-      answer.SetMarked(true);
-    } else {
-      answer.SetMarked(false);
-    }
-  }
-  if (yesButton.IsFocus(mouseX, mouseY)) {
-    yesButton.SetBackcolor(AQUA);
-  } else {
-    yesButton.SetBackcolor(DARKBLUE);
-  }
-  if (noButton.IsFocus(mouseX, mouseY)) {
-    noButton.SetBackcolor(AQUA);
-  } else {
-    noButton.SetBackcolor(DARKBLUE);
   }
 }

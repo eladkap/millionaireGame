@@ -54,7 +54,7 @@ class Question {
     line(
       this.pos.x + this.w + this.h / 2,
       this.pos.y,
-      this.xOffset + this.w + 2 * this.h + this.xOffset,
+      this.xOffset + 2 * this.w + 2 * this.h + this.xOffset,
       this.pos.y
     );
 
