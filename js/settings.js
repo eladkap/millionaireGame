@@ -1,7 +1,8 @@
-const SCREEN_WIDTH = 1600;
-const SCREEN_HEIGHT = 900;
+var SCREEN_WIDTH = 1600;
+var SCREEN_HEIGHT = 900;
 
 const FPS = 1;
+
 /* Colors */
 const BLACK = [0, 0, 0];
 const WHITE = [255, 255, 255];
@@ -131,6 +132,8 @@ const GAME_STATES = [
 const DELAY = 1000;
 const DELAY_ANSWER = 3000;
 const CHOOSE_ANSWER_DELAY = 3000;
+const FINAL_MEDIUM_ANSWER_DELAY = 5000;
+const FINAL_HARD_ANSWER_DELAY = 5000;
 
 /* Sound */
 const ALLOW_SPEECH = true;
@@ -140,5 +143,9 @@ const MEDIUM_QUESTIONS_SONG = "sound/medium_questions.mp3";
 const HARD_QUESTIONS_SONG = "sound/hard_questions.mp3";
 const LETS_PLAY_SONG = "sound/Lets Play.mp3";
 const CUT_5050_SOUND = "sound/5050.mp3";
-const EASY_QUESTIONS_RIGHT_ANSWER = "sound/easy_right_answer.mp3";
+const EASY_RIGHT_ANSWER_SOUND = "sound/easy_right_answer.mp3";
+const MEDIUM_RIGHT_ANSWER_SOUND = "sound/medium_right_answer.mp3";
+const HARD_RIGHT_ANSWER_SOUND = "sound/medium_right_answer.mp3";
 const LOSE_SOUND = "sound/lose.mp3";
+const FINAL_MEDIUM_ANSWER_SOUND = "sound/final_answer_medium.mp3";
+const FINAL_HARD_ANSWER_SOUND = "sound/final_answer_hard.mp3";

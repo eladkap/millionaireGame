@@ -1,7 +1,7 @@
 /* GLOBALS */
 var gameState;
 var question;
-var currQuestionIndex;
+var currQuestionIndex = 0;
 var answers;
 var chosenAnswer;
 var timer;
@@ -20,6 +20,13 @@ var hardQuestionsSong;
 var questionsSong;
 var questionsSongs;
 var cut5050Sound;
+var finalMediumAnswerSound;
+var finalHardAnswerSound;
+var finalAnswerSound;
+var easyRightAnswerSound;
+var mediumRightAnswerSound;
+var hardRightAnswerSound;
+var rightAnswerSound;
 
 /* Speaker */
 var speaker;
@@ -28,7 +35,6 @@ var speaker;
 var qdb;
 var questionsPool;
 var currQuestion;
-var currIndex = 0;
 
 function SetQuestion() {
   question = new Question(
@@ -239,11 +245,14 @@ async function ShowAnswerD() {
   answer.SetVisible(true);
   speaker.SetCallback(StartClock);
   speaker.Say(answer.txt);
-  // timer.Run();
 }
 
 function StartClock() {
-  timer.Run();
+  if (currQuestionIndex < 5) {
+    timer.Run();
+  } else {
+    timer.SetVisible(false);
+  }
 }
 
 /* Load Sound */
@@ -254,8 +263,12 @@ function LoadSoundFiles() {
   mediumQuestionsSong = loadSound(MEDIUM_QUESTIONS_SONG);
   hardQuestionsSong = loadSound(HARD_QUESTIONS_SONG);
   cut5050Sound = loadSound(CUT_5050_SOUND);
-  easyRightSound = loadSound(EASY_QUESTIONS_RIGHT_ANSWER);
+  easyRightAnswerSound = loadSound(EASY_RIGHT_ANSWER_SOUND);
+  mediumRightAnswerSound = loadSound(MEDIUM_RIGHT_ANSWER_SOUND);
+  hardRightAnswerSound = loadSound(HARD_RIGHT_ANSWER_SOUND);
   loseSound = loadSound(LOSE_SOUND);
+  finalMediumAnswerSound = loadSound(FINAL_MEDIUM_ANSWER_SOUND);
+  finalHardAnswerSound = loadSound(FINAL_HARD_ANSWER_SOUND);
 
   rulesSong.setVolume(0.5);
   letsPlaySong.setVolume(0.5);
@@ -263,7 +276,11 @@ function LoadSoundFiles() {
   mediumQuestionsSong.setVolume(0.5);
   hardQuestionsSong.setVolume(0.5);
   cut5050Sound.setVolume(0.5);
-  easyRightSound.setVolume(0.5);
+  easyRightAnswerSound.setVolume(0.5);
+  mediumRightAnswerSound.setVolume(0.5);
+  hardRightAnswerSound.setVolume(0.5);
+  finalMediumAnswerSound.setVolume(0.5);
+  finalHardAnswerSound.setVolume(0.5);
   loseSound.setVolume(0.5);
 
   questionsSongs = [easyQuestionsSong, mediumQuestionsSong, hardQuestionsSong];
@@ -276,7 +293,7 @@ function LoadQuestions() {
   qdb = new QuestionsDB();
   qdb.CreateFrom(questionsData);
   questionsPool = qdb.RandomizePool(10);
-  currQuestion = questionsPool[currIndex];
+  currQuestion = questionsPool[currQuestionIndex];
 }
 
 function CheckTimer() {
@@ -331,9 +348,8 @@ function HideYesNoButtons() {
   noButton.SetVisible(false);
 }
 
-function ChooseAnswer(answer) {
+async function ChooseAnswer(answer) {
   chosenAnswer = answer;
-  answer.SetBackcolor(ORANGE);
   speaker.Say("You say " + answer.txt + ". " + "Final answer?");
   gameState = GAME_FINAL_ANSWER;
   msgbox.SetText("Final answer?");
@@ -341,6 +357,17 @@ function ChooseAnswer(answer) {
 }
 
 async function CheckRightAnswer() {
+  chosenAnswer.SetBackcolor(ORANGE);
+  if (currQuestionIndex > 4 && currQuestionIndex < 10) {
+    questionsSong.stop();
+    finalAnswerSound = finalMediumAnswerSound;
+    finalAnswerSound.play();
+    await Sleep(FINAL_HARD_ANSWER_DELAY);
+  } else if (currQuestionIndex >= 10) {
+    finalAnswerSound = finalHardAnswerSound;
+    finalAnswerSound.play();
+    await Sleep(FINAL_HARD_ANSWER_DELAY);
+  }
   if (currQuestion.rightAnswer == chosenAnswer.letter) {
     RightAnswerChosen();
   } else {
@@ -350,8 +377,18 @@ async function CheckRightAnswer() {
 }
 
 async function RightAnswerChosen(answer) {
+  if (finalAnswerSound != undefined) {
+    finalAnswerSound.stop();
+  }
+  if (currQuestionIndex <= 4) {
+    rightAnswerSound = easyRightAnswerSound;
+  } else if (currQuestionIndex > 4 && currQuestionIndex < 10) {
+    rightAnswerSound = mediumRightAnswerSound;
+  } else {
+    rightAnswerSound = hardRightAnswerSound;
+  }
   moneyTable.IncreasePrize();
-  easyRightSound.play();
+  rightAnswerSound.play();
   speaker.Say("You right! you have " + moneyTable.CurrentPrize() + "dollars");
   gameState = GAME_SHOW_QUESTION;
   chosenAnswer.SetBackcolor(GREEN);
@@ -388,7 +425,7 @@ async function ShowFinalPrize() {
   let prize = CheckPointPrize(currQuestionIndex);
   speaker.Say("Your final price is: " + prize + "dollars.");
   await Sleep(5000);
-  speaker.stop();
+  speaker.Stop();
 }
 
 /* MAIN */
@@ -400,6 +437,8 @@ function preload() {
 function setup() {
   // createCanvas(windowWidth, windowHeight);
   createCanvas(SCREEN_WIDTH, SCREEN_HEIGHT);
+  // SCREEN_WIDTH = windowWidth;
+  // SCREEN_HEIGHT = windowHeight;
   frameRate(FPS);
   LoadQuestions();
   SetGame();
@@ -420,6 +459,7 @@ function draw() {
 
 async function NextQuestion() {
   currQuestionIndex++;
+  console.log("Current question index:" + currQuestionIndex);
   currQuestion = questionsPool[currQuestionIndex];
   SetQuestion();
   SetAnswers();
