@@ -238,45 +238,45 @@ function StartClock() {
 function LoadSoundFiles() {
   console.log("Loading sound files...");
   try {
-    rulesSong = loadSound(RULES_SONG);
+    rulesSong = new Audio(RULES_SONG);
     console.log("Sound1");
-    letsPlaySong = loadSound(LETS_PLAY_SONG);
+    letsPlaySong = new Audio(LETS_PLAY_SONG);
     console.log("Sound2");
-    easyQuestionsSong = loadSound(EASY_QUESTIONS_SONG);
+    easyQuestionsSong = new Audio(EASY_QUESTIONS_SONG);
     console.log("Sound3");
-    mediumQuestionsSong = loadSound(MEDIUM_QUESTIONS_SONG);
+    mediumQuestionsSong = new Audio(MEDIUM_QUESTIONS_SONG);
     console.log("Sound4");
-    hardQuestionsSong = loadSound(HARD_QUESTIONS_SONG);
+    hardQuestionsSong = new Audio(HARD_QUESTIONS_SONG);
     console.log("Sound5");
-    cut5050Sound = loadSound(CUT_5050_SOUND);
+    cut5050Sound = new Audio(CUT_5050_SOUND);
     console.log("Sound6");
-    easyRightAnswerSound = loadSound(EASY_RIGHT_ANSWER_SOUND);
+    easyRightAnswerSound = new Audio(EASY_RIGHT_ANSWER_SOUND);
     console.log("Sound7");
-    mediumRightAnswerSound = loadSound(MEDIUM_RIGHT_ANSWER_SOUND);
+    mediumRightAnswerSound = new Audio(MEDIUM_RIGHT_ANSWER_SOUND);
     console.log("Sound8");
-    hardRightAnswerSound = loadSound(HARD_RIGHT_ANSWER_SOUND);
+    hardRightAnswerSound = new Audio(HARD_RIGHT_ANSWER_SOUND);
     console.log("Sound9");
-    loseSound = loadSound(LOSE_SOUND);
+    loseSound = new Audio(LOSE_SOUND);
     console.log("Sound10");
-    finalMediumAnswerSound = loadSound(FINAL_MEDIUM_ANSWER_SOUND);
+    finalMediumAnswerSound = new Audio(FINAL_MEDIUM_ANSWER_SOUND);
     console.log("Sound11");
-    finalHardAnswerSound = loadSound(FINAL_HARD_ANSWER_SOUND);
+    finalHardAnswerSound = new Audio(FINAL_HARD_ANSWER_SOUND);
     console.log("Sound12");
-    phoneClockSound = loadSound(PHONE_CLOCK_SOUND);
+    phoneClockSound = new Audio(PHONE_CLOCK_SOUND);
     console.log("Sound13");
 
-    rulesSong.setVolume(0.5);
-    letsPlaySong.setVolume(0.5);
-    easyQuestionsSong.setVolume(0.5);
-    mediumQuestionsSong.setVolume(0.5);
-    hardQuestionsSong.setVolume(0.5);
-    cut5050Sound.setVolume(0.5);
-    easyRightAnswerSound.setVolume(0.5);
-    mediumRightAnswerSound.setVolume(0.5);
-    hardRightAnswerSound.setVolume(0.5);
-    finalMediumAnswerSound.setVolume(0.5);
-    finalHardAnswerSound.setVolume(0.5);
-    loseSound.setVolume(0.5);
+    // rulesSong.setVolume(0.5);
+    // letsPlaySong.setVolume(0.5);
+    // easyQuestionsSong.setVolume(0.5);
+    // mediumQuestionsSong.setVolume(0.5);
+    // hardQuestionsSong.setVolume(0.5);
+    // cut5050Sound.setVolume(0.5);
+    // easyRightAnswerSound.setVolume(0.5);
+    // mediumRightAnswerSound.setVolume(0.5);
+    // hardRightAnswerSound.setVolume(0.5);
+    // finalMediumAnswerSound.setVolume(0.5);
+    // finalHardAnswerSound.setVolume(0.5);
+    // loseSound.setVolume(0.5);
   } catch (error) {
     console.log(error);
   }
@@ -475,7 +475,7 @@ async function NextQuestion() {
 
 /* Keyboard Events */
 async function keyPressed() {
-  if (phoneClockSound.isPlaying() && keyCode == ESCAPE) {
+  if (keyCode == ESCAPE) {
     console.log("Escape.");
   }
 }
