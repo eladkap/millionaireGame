@@ -13,6 +13,6 @@ class Sound {
 
   Stop() {
     this.audio.pause();
-    this.currentTime = 0;
+    this.audio.currentTime = 0;
   }
 }
