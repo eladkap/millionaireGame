@@ -8,7 +8,6 @@ var timer;
 var moneyTable;
 var lifelines;
 var msgbox;
-var phoneMsgbox;
 var yesButton;
 var noButton;
 var startButton;
@@ -31,7 +30,8 @@ var hardRightAnswerSound;
 var rightAnswerSound;
 var phoneClockSound;
 
-/* Speaker - next version */
+/* Speaker */
+var speaker;
 
 /* Questions DB */
 var qdb;
@@ -102,6 +102,10 @@ function SetTimer() {
   timer = new Timer(TIMER_POS_X, TIMER_POS_Y, TIMER_RADIUS, TIMER_VALUE);
 }
 
+function SetSpeaker() {
+  speaker = new Speaker("Alex");
+}
+
 function SetMoneyTable() {
   moneyTable = new MoneyTable(
     MONEY_TABLE_POS_X,
@@ -146,10 +150,6 @@ function SetMessageBox() {
   msgbox = new MessageBox(MSG_BOX_POS_X, MSG_BOX_POS_Y, "");
 }
 
-function SetPhoneMessageBox() {
-  phoneMsgbox = new MessageBox(PHONE_MSG_BOX_POS_X, PHONE_MSG_BOX_POS_Y, "");
-}
-
 function SetButtons() {
   yesButton = new Button(
     YES_BUTTON_POS_X,
@@ -172,7 +172,6 @@ function SetButtons() {
     "Start",
     1
   );
-  HideYesNoButtons();
 }
 
 function DrawAnswers() {
@@ -201,7 +200,6 @@ function SetGame() {
   SetMoneyTable();
   SetLifelines();
   SetMessageBox();
-  SetPhoneMessageBox();
   SetButtons();
   gameState = GAME_START;
   currQuestionIndex = 0;
@@ -211,19 +209,48 @@ async function ShowQuestion() {
   console.log(question.txt);
   questionsSong = questionsSongs[int(currQuestionIndex / 5)];
 
+  // speaker.SetRate(0.7);
   if (currQuestionIndex == 0) {
     letsPlaySong.play();
-    await Sleep(DELAY_QUESTION);
+    await Sleep(5000);
     letsPlaySong.stop();
   }
   question.SetVisible(true);
   questionsSong.play();
-  for (let answer of answers) {
-    await Sleep(DELAY_ANSWER);
-    console.log(answer.txt);
-    answer.SetVisible(true);
-  }
-  StartClock();
+  speaker.SetCallback(ShowAnswerA);
+  speaker.Say(question.txt);
+}
+
+async function ShowAnswerA() {
+  let answer = answers[0];
+  console.log(answer.txt);
+  answer.SetVisible(true);
+  speaker.SetCallback(ShowAnswerB);
+  speaker.Say(answer.txt);
+}
+
+async function ShowAnswerB() {
+  let answer = answers[1];
+  console.log(answer.txt);
+  answer.SetVisible(true);
+  speaker.SetCallback(ShowAnswerC);
+  speaker.Say(answer.txt);
+}
+
+async function ShowAnswerC() {
+  let answer = answers[2];
+  console.log(answer.txt);
+  answer.SetVisible(true);
+  speaker.SetCallback(ShowAnswerD);
+  speaker.Say(answer.txt);
+}
+
+async function ShowAnswerD() {
+  let answer = answers[3];
+  console.log(answer.txt);
+  answer.SetVisible(true);
+  speaker.SetCallback(StartClock);
+  speaker.Say(answer.txt);
 }
 
 function StartClock() {
@@ -296,6 +323,11 @@ function GetTwoRandomWrongAnswers(questionObj) {
   return wrongAnswerIndices;
 }
 
+async function PrepareLifeline5050() {
+  speaker.SetCallback(PerformLifeline5050);
+  speaker.Say("The computer is about to take away two random wrong answers.");
+}
+
 async function PerformLifeline5050() {
   await Sleep(1000);
   let wrongAnswerIndices = GetTwoRandomWrongAnswers(currQuestion);
@@ -309,14 +341,27 @@ async function PerformLifeline5050() {
   cut5050Sound.stop();
 }
 
-function PerformLifelinePhone() {
+async function PrepareLifelinePhone() {
+  questionsSong.stop();
+  speaker.SetCallback(PerformLifelinePhone);
+  speaker.Say(
+    "Ok, we are going to call your friend. You will have 30 seconds to discuss. Time runs now!"
+  );
+}
+
+async function PerformLifelinePhone() {
+  speaker.SetRandomVoice();
+  timer.SetVisible(true);
+  timer.Reset();
+  timer.Run();
+  phoneClockSound.play();
   if (random() < 0.5) {
-    phoneMsgbox.setText(
+    speaker.Say(
       "Ok listen. I am sure the answer is " + currQuestion.rightAnswer
     );
   } else {
     let guessedAnswer = random(answers);
-    phoneMsgbox.setText(
+    speaker.Say(
       "Ohhh. ok. I am not sure. I would guess it is " + guessedAnswer.txt
     );
   }
@@ -377,9 +422,15 @@ async function RightAnswerChosen(answer) {
   }
   moneyTable.IncreasePrize();
   rightAnswerSound.play();
+  speaker.Say(
+    "You right! you have " +
+      moneyTable.CurrentPrize().replace(",", "") +
+      "dollars"
+  );
   gameState = GAME_SHOW_QUESTION;
   chosenAnswer.SetBackcolor(GREEN);
   await Sleep(5000);
+  speaker.Stop();
   await NextQuestion();
 }
 
@@ -387,10 +438,10 @@ async function WrongQuestionChosen() {
   questionsSong.stop();
   await Sleep(1000);
   gameState = GAME_OVER;
-  msgbox.SetText("sorry, You are wrong.");
+  speaker.SetCallback(ShowRightAnswer);
+  speaker.Say("sorry, You are wrong.");
   chosenAnswer.SetBackcolor(RED);
   loseSound.play();
-  await ShowRightAnswer();
 }
 
 async function ShowRightAnswer() {
@@ -398,23 +449,26 @@ async function ShowRightAnswer() {
   let rightAnsIndex = rightAnsLetter.charCodeAt() - "A".charCodeAt();
   let rightAnswerObj = answers[rightAnsIndex];
   rightAnswerObj.SetBackcolor(GREEN);
-  msgbox.SetText(
+  speaker.SetCallback(ShowFinalPrize);
+  speaker.Say(
     "Because, the right answer is " +
       rightAnswerObj.letter +
       ", " +
       rightAnswerObj.txt
   );
-  ShowFinalPrize();
 }
 
-function ShowFinalPrize() {
+async function ShowFinalPrize() {
   let prize = CheckPointPrize(currQuestionIndex);
-  msgbox.SetText("Your final price is: " + prize + "dollars.");
+  speaker.Say("Your final price is: " + prize + "dollars.");
+  await Sleep(5000);
+  speaker.Stop();
 }
 
 /* MAIN */
 function preload() {
   LoadSoundFiles();
+  SetSpeaker();
 }
 
 function setup() {
@@ -457,9 +511,23 @@ async function NextQuestion() {
 
 /* Keyboard Events */
 async function keyPressed() {
-  if (phoneClockSound.isPlaying() && keyCode == ESCAPE) {
-    console.log("Escape.");
-  }
+  // if (phoneClockSound.isPlaying() && keyCode == ESCAPE) {
+  //   console.log("Escape.");
+  //   phoneClockSound.stop();
+  //   questionsSong.play();
+  //   speaker.SetVoice("Alex");
+  //   return;
+  // }
+  // if (gameState == GAME_START && keyCode === ENTER) {
+  //   questionsSong = questionsSongs[0];
+  //   gameState = GAME_SHOW_QUESTION;
+  //   HideYesNoButtons();
+  //   msgbox.SetText("Show question");
+  //   await ShowQuestion();
+  //   console.log("Waiting for response");
+  //   gameState = GAME_WAIT_FOR_RESPONSE;
+  //   msgbox.SetText("Waiting for response...");
+  // }
 }
 
 /* Mouse Events */
@@ -470,6 +538,7 @@ async function mousePressed() {
     startButton.SetVisible(false);
     questionsSong = questionsSongs[0];
     gameState = GAME_SHOW_QUESTION;
+    HideYesNoButtons();
     msgbox.SetText("Show question");
     await ShowQuestion();
     console.log("Waiting for response");
@@ -502,10 +571,10 @@ async function mousePressed() {
       console.log(lifeline.type + " was chosen");
       if (lifeline.type == "50:50") {
         console.log("50:50");
-        PerformLifeline5050();
+        PrepareLifeline5050();
       } else if (lifeline.type == "phone") {
         console.log("Phone call");
-        PerformLifelinePhone();
+        PrepareLifelinePhone();
       }
     }
   }

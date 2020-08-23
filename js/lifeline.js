@@ -40,7 +40,7 @@ class LifeLine {
     if (this.type == "50:50") {
       fill(WHITE);
       noStroke();
-      textFont(FONT_FAMILY);
+      textFont(FONT_FAMILY2);
       textAlign(CENTER);
       textStyle(NORMAL);
       textSize(FONT_SIZE[4]);
