@@ -212,12 +212,12 @@ async function ShowQuestion() {
   questionsSong = questionsSongs[int(currQuestionIndex / 5)];
 
   if (currQuestionIndex == 0) {
-    letsPlaySong.play();
+    letsPlaySong.Play();
     await Sleep(DELAY_QUESTION);
-    letsPlaySong.stop();
+    letsPlaySong.Stop();
   }
   question.SetVisible(true);
-  questionsSong.play();
+  questionsSong.Play();
   for (let answer of answers) {
     await Sleep(DELAY_ANSWER);
     console.log(answer.txt);
@@ -237,49 +237,46 @@ function StartClock() {
 /* Load Sound */
 function LoadSoundFiles() {
   console.log("Loading sound files...");
-  try {
-    rulesSong = new Audio(RULES_SONG);
-    console.log("Sound1");
-    letsPlaySong = new Audio(LETS_PLAY_SONG);
-    console.log("Sound2");
-    easyQuestionsSong = new Audio(EASY_QUESTIONS_SONG);
-    console.log("Sound3");
-    mediumQuestionsSong = new Audio(MEDIUM_QUESTIONS_SONG);
-    console.log("Sound4");
-    hardQuestionsSong = new Audio(HARD_QUESTIONS_SONG);
-    console.log("Sound5");
-    cut5050Sound = new Audio(CUT_5050_SOUND);
-    console.log("Sound6");
-    easyRightAnswerSound = new Audio(EASY_RIGHT_ANSWER_SOUND);
-    console.log("Sound7");
-    mediumRightAnswerSound = new Audio(MEDIUM_RIGHT_ANSWER_SOUND);
-    console.log("Sound8");
-    hardRightAnswerSound = new Audio(HARD_RIGHT_ANSWER_SOUND);
-    console.log("Sound9");
-    loseSound = new Audio(LOSE_SOUND);
-    console.log("Sound10");
-    finalMediumAnswerSound = new Audio(FINAL_MEDIUM_ANSWER_SOUND);
-    console.log("Sound11");
-    finalHardAnswerSound = new Audio(FINAL_HARD_ANSWER_SOUND);
-    console.log("Sound12");
-    phoneClockSound = new Audio(PHONE_CLOCK_SOUND);
-    console.log("Sound13");
 
-    // rulesSong.setVolume(0.5);
-    // letsPlaySong.setVolume(0.5);
-    // easyQuestionsSong.setVolume(0.5);
-    // mediumQuestionsSong.setVolume(0.5);
-    // hardQuestionsSong.setVolume(0.5);
-    // cut5050Sound.setVolume(0.5);
-    // easyRightAnswerSound.setVolume(0.5);
-    // mediumRightAnswerSound.setVolume(0.5);
-    // hardRightAnswerSound.setVolume(0.5);
-    // finalMediumAnswerSound.setVolume(0.5);
-    // finalHardAnswerSound.setVolume(0.5);
-    // loseSound.setVolume(0.5);
-  } catch (error) {
-    console.log(error);
-  }
+  rulesSong = new Sound(RULES_SONG);
+  console.log("Sound1");
+  letsPlaySong = new Sound(LETS_PLAY_SONG);
+  console.log("Sound2");
+  easyQuestionsSong = new Sound(EASY_QUESTIONS_SONG);
+  console.log("Sound3");
+  mediumQuestionsSong = new Sound(MEDIUM_QUESTIONS_SONG);
+  console.log("Sound4");
+  hardQuestionsSong = new Sound(HARD_QUESTIONS_SONG);
+  console.log("Sound5");
+  cut5050Sound = new Sound(CUT_5050_SOUND);
+  console.log("Sound6");
+  easyRightAnswerSound = new Sound(EASY_RIGHT_ANSWER_SOUND);
+  console.log("Sound7");
+  mediumRightAnswerSound = new Sound(MEDIUM_RIGHT_ANSWER_SOUND);
+  console.log("Sound8");
+  hardRightAnswerSound = new Sound(HARD_RIGHT_ANSWER_SOUND);
+  console.log("Sound9");
+  loseSound = new Sound(LOSE_SOUND);
+  console.log("Sound10");
+  finalMediumAnswerSound = new Sound(FINAL_MEDIUM_ANSWER_SOUND);
+  console.log("Sound11");
+  finalHardAnswerSound = new Sound(FINAL_HARD_ANSWER_SOUND);
+  console.log("Sound12");
+  phoneClockSound = new Sound(PHONE_CLOCK_SOUND);
+  console.log("Sound13");
+
+  // rulesSong.setVolume(0.5);
+  // letsPlaySong.setVolume(0.5);
+  // easyQuestionsSong.setVolume(0.5);
+  // mediumQuestionsSong.setVolume(0.5);
+  // hardQuestionsSong.setVolume(0.5);
+  // cut5050Sound.setVolume(0.5);
+  // easyRightAnswerSound.setVolume(0.5);
+  // mediumRightAnswerSound.setVolume(0.5);
+  // hardRightAnswerSound.setVolume(0.5);
+  // finalMediumAnswerSound.setVolume(0.5);
+  // finalHardAnswerSound.setVolume(0.5);
+  // loseSound.setVolume(0.5);
 
   questionsSongs = [easyQuestionsSong, mediumQuestionsSong, hardQuestionsSong];
 }
@@ -299,7 +296,7 @@ function CheckTimer() {
     gameState = GAME_OVER;
     console.log("Time's up!!!");
     msgbox.SetText("Time's up!!!");
-    questionsSong.stop();
+    questionsSong.Stop();
   }
 }
 
@@ -322,9 +319,9 @@ async function PerformLifeline5050() {
     answers[answerIndex].SetVisible(false);
   }
   lifelines[0].Disable();
-  cut5050Sound.play();
+  cut5050Sound.Play();
   await Sleep(2000);
-  cut5050Sound.stop();
+  cut5050Sound.Stop();
 }
 
 function PerformLifelinePhone() {
@@ -364,14 +361,14 @@ async function ChooseAnswer(answer) {
 async function CheckRightAnswer() {
   chosenAnswer.SetBackcolor(ORANGE);
   if (currQuestionIndex > 4 && currQuestionIndex < 10) {
-    questionsSong.stop();
+    questionsSong.Stop();
     finalAnswerSound = finalMediumAnswerSound;
-    finalAnswerSound.play();
+    finalAnswerSound.Play();
     await Sleep(FINAL_HARD_ANSWER_DELAY);
   } else if (currQuestionIndex >= 10) {
-    questionsSong.stop();
+    questionsSong.Stop();
     finalAnswerSound = finalHardAnswerSound;
-    finalAnswerSound.play();
+    finalAnswerSound.Play();
     await Sleep(FINAL_HARD_ANSWER_DELAY);
   }
   if (currQuestion.rightAnswer == chosenAnswer.letter) {
@@ -384,7 +381,7 @@ async function CheckRightAnswer() {
 
 async function RightAnswerChosen(answer) {
   if (finalAnswerSound != undefined) {
-    finalAnswerSound.stop();
+    finalAnswerSound.Stop();
   }
   if (currQuestionIndex <= 4) {
     rightAnswerSound = easyRightAnswerSound;
@@ -394,7 +391,7 @@ async function RightAnswerChosen(answer) {
     rightAnswerSound = hardRightAnswerSound;
   }
   moneyTable.IncreasePrize();
-  rightAnswerSound.play();
+  rightAnswerSound.Play();
   gameState = GAME_SHOW_QUESTION;
   chosenAnswer.SetBackcolor(GREEN);
   await Sleep(5000);
@@ -402,12 +399,12 @@ async function RightAnswerChosen(answer) {
 }
 
 async function WrongQuestionChosen() {
-  questionsSong.stop();
+  questionsSong.Stop();
   await Sleep(1000);
   gameState = GAME_OVER;
   msgbox.SetText("sorry, You are wrong.");
   chosenAnswer.SetBackcolor(RED);
-  loseSound.play();
+  loseSound.Play();
   await ShowRightAnswer();
 }
 
@@ -468,7 +465,7 @@ async function NextQuestion() {
   timer.Reset();
   HideYesNoButtons();
   gameState = GAME_START;
-  questionsSong.stop();
+  questionsSong.Stop();
   await ShowQuestion();
   gameState = GAME_WAIT_FOR_RESPONSE;
 }
