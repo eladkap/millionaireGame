@@ -143,7 +143,8 @@ const FINAL_HARD_ANSWER_DELAY = 5000;
 
 /* Sound */
 const ALLOW_SPEECH = false;
-const RULES_SONG = "sound/Millionaire - Explain the Rules.mp3";
+const STARG_GAME_SOUND = "sound/start_game.mp3";
+const RULES_SONG = "sound/rules.mp3";
 const EASY_QUESTIONS_SONG = "sound/easy_questions.mp3";
 const MEDIUM_QUESTIONS_SONG = "sound/medium_questions.mp3";
 const HARD_QUESTIONS_SONG = "sound/hard_questions.mp3";
@@ -156,3 +157,5 @@ const LOSE_SOUND = "sound/lose.mp3";
 const FINAL_MEDIUM_ANSWER_SOUND = "sound/final_answer_medium.mp3";
 const FINAL_HARD_ANSWER_SOUND = "sound/final_answer_hard.mp3";
 const PHONE_CLOCK_SOUND = "sound/phone_clock.mp3";
+
+var SOUNDS_DICT = {};

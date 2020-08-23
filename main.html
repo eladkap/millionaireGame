@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Millionaire Game</title>
+    <link rel="stylesheet" href="css/stylesheet.css" />
+    <script src="js/settings.js"></script>
+    <script src="js/sound.js"></script>
+    <script src="js/loader.js"></script>
+  </head>
+  <body onload="PlayTheme()">
+    <div class="menu">
+      <img id="img_cover" class="img-cover" src="img/millionaire_img.jpeg" />
+      <ul>
+        <li id="btn_play" class="button button-play" onclick="PlayGame()">
+          Play
+        </li>
+        <li id="btn_rules" class="button button-rules" onclick="ShowRules()">
+          Rules
+        </li>
+        <li id="btn_start" class="button button-start" onclick="StartGame()">
+          Start
+        </li>
+        <li id="btn_back" class="button button-back" onclick="BackToMain()">
+          Back
+        </li>
+      </ul>
+      <p></p>
+    </div>
+
+    <input id="player_name" type="text" />
+  </body>
+</html>

@@ -4,17 +4,90 @@ canvas {
   height: 100%;
   /* border: 1px solid black; */
   /* background: transparent; */
-  background: rgb(200, 200, 200);
+  background: #c8c8c8;
 }
-
 body {
   margin: 0;
-  background: rgb(150, 150, 150);
+  color: white;
+  background: rgba(20, 20, 20, 1);
+}
+.button {
+  list-style: none;
+  width: 10%;
+  line-height: 3%;
+  height: 1%;
+  padding: 1.5%;
+  text-align: center;
+  border-radius: 5%;
+  position: absolute;
+  left: 43%;
+  border: 1px solid white;
+  font-family: "Copperplate Gothic";
+  font-size: xx-large;
+  cursor: pointer;
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0);
+  outline: 2px solid;
+  outline-color: rgba(255, 255, 255, 0);
+  background: darkblue;
+}
+.button:hover {
+  box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.5), 0 0 10px white;
+  outline-color: rgba(255, 255, 255, 0);
+  outline-offset: 2%;
+  text-shadow: white 1px 1px 2px;
+}
+
+.button-play {
+  top: 90%;
+}
+
+.button-rules {
+  top: 5%;
+}
+
+.button-start {
+  top: 30%;
+  visibility: hidden;
+}
+
+.button-back {
+  top: 5%;
+  visibility: hidden;
 }
 
 h1 {
-  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
-    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  font-family: "Copperplate Gothic";
   font-size: xx-large;
   font-weight: 400;
+}
+
+.img-cover {
+  width: 49%;
+  text-align: center;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  opacity: 1;
+}
+
+.player_name {
+  font-family: "Copperplate Gothic";
+  font-size: xx-large;
+  font-weight: 400;
+  left: 38%;
+  width: 20%;
+  background-color: gray;
+}
+
+@media screen and (max-width: 992px) {
+  .button {
+    font-size: x-large;
+  }
+}
+
+/* On screens that are 600px or less, set the background color to olive */
+@media screen and (max-width: 600px) {
+  .button {
+    font-size: large;
+  }
 }
