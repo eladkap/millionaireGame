@@ -22,22 +22,32 @@ function PlayTheme() {
 function ShowRules() {
   console.log("Show rules");
   document.getElementById("img_cover").style.opacity = 0.1;
-  document.getElementById("btn-rules").style.visibility = false;
-  document.getElementById("btn-back").style.visibility = true;
+  document.getElementById("btn_rules").style.visibility = "hidden";
+  document.getElementById("btn_back").style.visibility = "visible";
+  document.getElementById("rules_para").style.visibility = "visible";
+  document.getElementById("btn_back").style.visibility = "visible";
+  document.getElementById("btn_play").style.visibility = "hidden";
 }
 
 function BackToMain() {
   console.log("Back to main");
   document.getElementById("img_cover").style.opacity = 1;
-  document.getElementById("btn-rules").style.visibility = true;
-  document.getElementById("btn-back").style.visibility = false;
-  document.getElementById("btn-play").style.visibility = true;
+  document.getElementById("btn_rules").style.visibility = "visible";
+  document.getElementById("btn_back").style.visibility = "hidden";
+  document.getElementById("btn_play").style.visibility = "visible";
+  document.getElementById("btn_start").style.visibility = "hidden";
+  document.getElementById("player_name").style.visibility = "hidden";
+  document.getElementById("rules_para").style.visibility = "hidden";
 }
 
 function PlayGame() {
   console.log("Play game");
   document.getElementById("img_cover").style.opacity = 0.1;
-  document.getElementById("btn-rules").style.visibility = false;
+  document.getElementById("btn_rules").style.visibility = "hidden";
+  document.getElementById("btn_play").style.visibility = "hidden";
+  document.getElementById("btn_start").style.visibility = "visible";
+  document.getElementById("btn_back").style.visibility = "visible";
+  document.getElementById("player_name").style.visibility = "visible";
 }
 
 LoadSoundFiles();
