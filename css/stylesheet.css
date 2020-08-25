@@ -91,6 +91,13 @@ h1 {
   font-weight: 400;
 }
 
+h2 {
+  font-family: "Arial";
+  font-size: x-large;
+  color: white;
+  font-weight: 400;
+}
+
 .rules-para {
   position: absolute;
   top: 20%;
@@ -104,7 +111,8 @@ h1 {
 .img-cover {
   position: absolute;
   left: 25%;
-  width: 49%;
+  width: 50%;
+  height: 100%;
   text-align: center;
   display: block;
   margin-left: auto;
@@ -113,21 +121,56 @@ h1 {
 }
 
 /* Game controls */
+
 .question-area {
   position: absolute;
-  width: 49%;
+  text-align: center;
+  width: 50%;
   height: 10%;
-  top: 20%;
+  top: 65%;
   left: 25%;
-  font-family: "Copperplate Gothic";
+  font-family: "Arial";
   font-size: xx-large;
-  font-weight: 200;
-  background-color: rgba(20, 20, 50, 1);
+  font-weight: 100;
+  background-color: rgba(20, 20, 20, 1);
   border: 1px solid aqua;
+  border-radius: 5%;
+}
+
+.answer_area {
+  position: absolute;
+  text-align: left;
+  width: 20%;
+  height: 7%;
+  font-family: "Arial";
+  font-size: large;
+  background-color: rgba(20, 20, 20, 1);
+  border: 1px solid aqua;
+  border-radius: 5%;
+}
+.answer_area-a {
+  top: 80%;
+  left: 25%;
+}
+.answer_area-b {
+  top: 80%;
+  left: 55%;
+}
+.answer_area-c {
+  top: 90%;
+  left: 25%;
+}
+.answer_area-d {
+  top: 90%;
+  left: 55%;
 }
 
 @media screen and (max-width: 992px) {
   .button {
+    font-size: x-large;
+  }
+
+  .answer_area {
     font-size: x-large;
   }
 }
@@ -135,6 +178,10 @@ h1 {
 /* On screens that are 600px or less, set the background color to olive */
 @media screen and (max-width: 600px) {
   .button {
+    font-size: large;
+  }
+
+  .answer_area {
     font-size: large;
   }
 }
