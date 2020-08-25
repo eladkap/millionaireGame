@@ -8,6 +8,7 @@
     <script src="js/settings.js"></script>
     <script src="js/sound.js"></script>
     <script src="js/loader.js"></script>
+    <script src="js/game.js"></script>
   </head>
   <body onload="PlayTheme()">
     <div class="menu">
@@ -26,7 +27,10 @@
           Back
         </li>
       </ul>
+
       <input id="player_name" class="player-name" type="text" maxlength="10" />
+      <span id="error_msg" class="error-msg">Please enter your name</span>
+
       <p id="rules_para" class="rules-para">
         - 15 questions to 1,000,000$ <br /><br />
         - Two checkpoints: 1000$, 32,000$ <br /><br />

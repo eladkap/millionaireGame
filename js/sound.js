@@ -15,4 +15,12 @@ class Sound {
     this.audio.pause();
     this.audio.currentTime = 0;
   }
+
+  GetDuration() {
+    return this.audio.duration;
+  }
+
+  SetCallback(action) {
+    this.audio.onended = action;
+  }
 }

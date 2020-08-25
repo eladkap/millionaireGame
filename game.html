@@ -5,9 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/stylesheet.css" />
     <script src="js/settings.js"></script>
+    <script src="js/utils.js"></script>
     <script src="js/sound.js"></script>
-    <script src="js/loader.js"></script>
+    <script src="js/game.js"></script>
     <title>Millionaire Game</title>
   </head>
-  <body></body>
+  <body onload="LoadGame()">
+    <img id="img_cover" class="img-cover" src="img/millionaire_img.jpeg" />
+
+    <!-- Question area -->
+    <div id="question_area" class="question-area"></div>
+  </body>
 </html>

@@ -157,5 +157,6 @@ const LOSE_SOUND = "sound/lose.mp3";
 const FINAL_MEDIUM_ANSWER_SOUND = "sound/final_answer_medium.mp3";
 const FINAL_HARD_ANSWER_SOUND = "sound/final_answer_hard.mp3";
 const PHONE_CLOCK_SOUND = "sound/phone_clock.mp3";
+const START_GAME_SOUND = "sound/start_game.mp3";
 
 var SOUNDS_DICT = {};
