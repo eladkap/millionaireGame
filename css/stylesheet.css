@@ -203,8 +203,26 @@ h2 {
   width: 5%;
 }
 
+/* Money Table*/
+#money_table {
+  position: absolute;
+  width: 17%;
+  left: 58%;
+  top: 15%;
+  font-family: Copperplate Gothic;
+  font-size: x-large;
+  background-color: rgba(0, 0, 50);
+  border: 1px solid aqua;
+  opacity: 0.5;
+}
+
+/* On screens that are 992px or less */
 @media screen and (max-width: 992px) {
   .button {
+    font-size: x-large;
+  }
+
+  .question-area {
     font-size: x-large;
   }
 
@@ -213,13 +231,32 @@ h2 {
   }
 }
 
-/* On screens that are 600px or less, set the background color to olive */
+/* On screens that are 600px or less */
 @media screen and (max-width: 600px) {
   .button {
-    font-size: large;
+    font-size: medium;
+  }
+
+  .question-area {
+    font-size: x-large;
   }
 
   .answer_area {
-    font-size: large;
+    font-size: medium;
+  }
+}
+
+/* On screens that are 300 or less */
+@media screen and (max-width: 300px) {
+  .button {
+    font-size: 8px;
+  }
+
+  .question-area {
+    font-size: 8px;
+  }
+
+  .answer_area {
+    font-size: 8px;
   }
 }
