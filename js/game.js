@@ -1,27 +1,79 @@
 var game;
+var timer;
 
 class Game {
   constructor() {
     this.gameState = GAME_START;
     this.questionIndex = 0;
+    this.chosenAnswer = null;
   }
 
   IncrementQuestion() {
     this.questionIndex++;
   }
+
+  SetChosenAnswer(chosenAnswer) {
+    this.chosenAnswer = chosenAnswer;
+  }
+}
+
+class Timer {
+  constructor(timerElement, initValue) {
+    this.timerElement = timerElement;
+    this.timerDiv = this.timerElement.getElementsByTagName("div")[0];
+    this.timerDiv.innerHTML = initValue;
+    this.initValue = initValue;
+    this.value = initValue;
+    this.running = false;
+  }
+
+  Update() {
+    if (this.running) {
+      this.value--;
+      if (this.value >= 0) {
+        this.timerDiv.innerHTML = this.value;
+      } else if (this.value == 0) {
+        this.timerDiv.innerHTML = 0;
+      }
+    }
+  }
+
+  Start() {
+    console.log("Timer started.");
+    this.running = true;
+  }
+
+  Stop() {
+    console.log("Timer stopped.");
+    this.running = false;
+  }
+
+  Reset() {
+    console.log("Timer reset.");
+    this.value = this.initValue;
+  }
 }
 
 function LoadGame() {
   console.log("Load game");
+  timer = new Timer(document.getElementById("timer"), 30);
   game = new Game();
   LoadSoundFiles();
   document.getElementById("img_cover").style.opacity = 0.1;
-  // SOUNDS_DICT["start_game"].SetCallback(LoadFirstQuestion); todo: uncomment
-  // SOUNDS_DICT["start_game"].Play(); todo: uncomment
+  // SOUNDS_DICT["start_game"].SetCallback(LoadFirstQuestion);
+  // SOUNDS_DICT["start_game"].Play();
   LoadMoneyTable();
-  LoadFirstQuestion(); // todo: comment
+}
 
-  SetCurrentMoneyIndex(1); // todo: comment
+function UpdateTimer() {
+  timer.Update();
+}
+
+function StartGame() {
+  setInterval(UpdateTimer, 1000);
+  timer.Start();
+  SetCurrentMoneyIndex(1);
+  LoadFirstQuestion();
 }
 
 /* Question and Answers */
@@ -61,7 +113,7 @@ function CreateTable(tableData) {
     var cell1 = document.createElement("td");
     var cell2 = document.createElement("td");
     cell1.appendChild(document.createTextNode(String(len - i)));
-    cell2.appendChild(document.createTextNode(tableData[i]));
+    cell2.appendChild(document.createTextNode(tableData[i] + " " + CURRENCY));
     row.appendChild(cell1);
     row.appendChild(cell2);
     tableBody.appendChild(row);
@@ -88,5 +140,67 @@ function SetCurrentMoneyIndex(index) {
 }
 
 function LoadNextQuestion() {
+  timer.Stop();
+  timer.Reset();
   game.IncrementQuestion();
 }
+
+/* Lifelines*/
+function PerformLifeline5050() {
+  console.log("Lifeline 50:50 was taken.");
+}
+
+function PerformLifelinePhone() {
+  console.log("Lifeline phone was taken.");
+}
+
+function PerformLifelineAudience() {
+  console.log("Lifeline audience was taken.");
+}
+
+/* Key Events */
+document.addEventListener(
+  "keypress",
+  (event) => {
+    let keyName = event.key;
+    if (keyName === "Enter") {
+      StartGame();
+    }
+    if (keyName === "s") {
+      timer.Stop();
+    }
+  },
+  false
+);
+
+/* Mouse events */
+document.addEventListener("mousedown", (event) => {
+  let clickedElement = event.srcElement;
+  let elementId = clickedElement.id;
+  console.log(elementId);
+
+  // Lifeline was chosen
+  if (elementId == "lifeline_5050") {
+    PerformLifeline5050();
+  }
+  if (elementId == "lifeline_phone") {
+    PerformLifelinePhone();
+  }
+  if (elementId == "lifeline_audience") {
+    PerformLifelineAudience();
+  }
+
+  // Answer was chosen
+  if (elementId == "answerA_area") {
+    game.SetChosenAnswer("A");
+  }
+  if (elementId == "answerB_area") {
+    game.SetChosenAnswer("B");
+  }
+  if (elementId == "answerC_area") {
+    game.SetChosenAnswer("C");
+  }
+  if (elementId == "answerD_area") {
+    game.SetChosenAnswer("D");
+  }
+});
